@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router'
 import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
 import { ClaimBadge } from '../../components/ClaimBadge'
 import { getLearningCard, learningCards } from '../../data/learningCard'
+import { RealSpaceWeather } from '../../components/RealSpaceWeather'
 
 export function LessonPage() {
   const { cardId } = useParams()
@@ -39,7 +40,7 @@ export function LessonPage() {
           </li>
         ))}
       </ul>
-
+      {card.panel === 'space-weather' && <RealSpaceWeather />}
       <nav aria-label="Lesson navigation" className="mt-10 flex justify-between text-sm">
         {prev ? <Link to={`/learn/${prev.id}`} className="inline-flex items-center gap-1 hover:text-white"><ArrowLeft size={14} aria-hidden /> {prev.title}</Link> : <span />}
         {next ? <Link to={`/learn/${next.id}`} className="inline-flex items-center gap-1 hover:text-white">{next.title} <ArrowRight size={14} aria-hidden /></Link> : <span />}

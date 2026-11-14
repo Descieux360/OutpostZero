@@ -13,7 +13,8 @@ export interface LearningCard {
   /** Which learning objective (spec 4.2) this card serves. */
   objective: string
   summary: string
-  claims: Claim[]
+  claims: Claim[],
+  panel?: 'space-weather'
 }
 
 const CSA_FOOD = { title: 'CSA: Growing healthy food in space and in remote areas', url: 'https://csa-asc.gc.ca/eng/sciences/food-production/growing-healthy-food-in-space-and-remote-areas.asp' }
@@ -62,6 +63,7 @@ export const learningCards: LearningCard[] = [
     title: 'Solar storms and shelter',
     objective: 'Explain, at an introductory level, why radiation shielding and reducing exposure during a solar event matter.',
     summary: 'Why the habitat has a shielded area, and what sheltering costs.',
+    panel: 'space-weather',
     claims: [
       { kind: 'source-fact', text: 'DONKI catalogs space-weather events, including solar flares, solar energetic particle events and coronal mass ejections.', citation: DONKI },
       { kind: 'source-fact', text: 'The DONKI page says its real-time information should be treated as prototyping quality, for research context.', citation: DONKI },
