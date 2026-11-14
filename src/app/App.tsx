@@ -4,6 +4,8 @@ import { MissionProvider, useMission } from '../features/mission/MissionContext'
 import { MissionPage } from '../features/mission/MissionPage'
 import { WelcomeScreen } from '../features/mission/WelcomeScreen'
 import { AppLayout } from './AppLayout'
+import { LessonPage } from '../features/lessons/LessonPage'
+import { LessonsPage } from '../features/lessons/LessonsPage'
 
 function WelcomeRoute() {
   const navigate = useNavigate()
@@ -59,6 +61,8 @@ export default function App() {
             <Route path="/briefing" element={<BriefingRoute />} />
             <Route path="/mission" element={<MissionRoute />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/learn" element={<LessonsPage />} />
+            <Route path="/learn/:cardId" element={<LessonPage />} />
           </Route>
         </Routes>
       </MissionProvider>

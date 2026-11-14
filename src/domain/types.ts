@@ -51,3 +51,13 @@ export interface MissionConfig {
   systems: SystemConfig[]
   incidents: ScheduledIncident[]
 }
+
+export interface SystemConfig {
+  id: SystemId
+  name: string
+  role: string
+  effectsByMode: Partial<Record<SystemMode, Partial<Resources>>>
+  explainer: string
+  /** Lesson card id shown as "Learn more" in the building panel. */
+  lessonId?: string
+}

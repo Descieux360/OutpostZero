@@ -1,4 +1,4 @@
-export type ClaimKind = 'source-fact' | 'derived-value' | 'game-assumption'
+export type ClaimKind = 'source-fact' | 'derived-value' | 'game-assumption' | 'needs-source'
 
 export interface SourceEntry {
   kind: ClaimKind

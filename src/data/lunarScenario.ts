@@ -17,6 +17,7 @@ export const lunarScenario: MissionConfig = {
   systems: [
     {
       id: 'solar',
+      lessonId: 'energy-planning',
       name: 'Solar array',
       role: 'Energy supply',
       effectsByMode: { normal: { energy: 40 }, conserve: { energy: 40 }, damaged: { energy: 15 } },
@@ -25,6 +26,7 @@ export const lunarScenario: MissionConfig = {
     },
     {
       id: 'habitat',
+      lessonId: 'radiation-shelter',
       name: 'Habitat and life support',
       role: 'Oxygen, water recovery, crew shelter',
       effectsByMode: {
@@ -36,6 +38,7 @@ export const lunarScenario: MissionConfig = {
     },
     {
       id: 'greenhouse',
+      lessonId: 'food-needs-inputs',
       name: 'Greenhouse',
       role: 'Food production',
       effectsByMode: {

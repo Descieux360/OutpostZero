@@ -24,6 +24,7 @@ export function NavBar() {
           Mission Control <span className="text-xs">(begin from briefing)</span>
         </span>
       )}
+      <NavLink to="/learn" className={linkClass} onClick={close}>Lessons</NavLink>
     </>
   )
 
