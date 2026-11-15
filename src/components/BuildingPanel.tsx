@@ -1,150 +1,303 @@
-import { MousePointerClick, Wrench } from 'lucide-react'
-import type { Dispatch } from 'react'
-import { canPerformAction, type ActionCheck, type PlayerAction } from '../domain/actions'
-import type { MissionAction } from '../features/mission/missionReducer'
-import type { MissionState, SystemConfig, SystemMode } from '../domain/types'
-import { MockBadge } from './MockBadge'
-import { StatusPill } from './StatusPill'
+import React from 'react';
+import { Link } from 'react-router';
+import {
+  Zap,
+  Wind,
+  Droplets,
+  Utensils,
+  Wrench,
+  Home,
+  Users,
+  Radio,
+  Compass,
+  BookOpen,
+  AlertTriangle,
+  Sparkles,
+  CheckCircle2,
+  AlertOctagon,
+  FlaskConical,
+  ArrowRight,
+} from 'lucide-react';
+import type { SystemId, SystemMode, MissionState, MissionConfig } from '../domain/types';
+import { canPerformAction, type PlayerAction } from '../domain/actions';
 
-const modeLabel: Record<SystemMode, string> = { normal: 'Normal operation', conserve: 'Conserving', paused: 'Paused', damaged: 'Damaged' }
-const selectableModes = [
-  { mode: 'normal', label: 'Normal' },
-  { mode: 'conserve', label: 'Conserve' },
-  { mode: 'paused', label: 'Pause' },
-] as const
-
-interface Props {
-  system: SystemConfig | null
-  mode?: SystemMode
-  state: MissionState
-  dispatch: Dispatch<MissionAction>
+interface BuildingPanelProps {
+  selectedObjectId: string | null;
+  state: MissionState;
+  config: MissionConfig;
+  onApplyAction: (action: PlayerAction) => void;
+  onAdvanceDay: () => void;
 }
 
-function kidFriendlyReason(reason?: string) {
-  if (!reason) return 'This action is unavailable right now.'
-  if (reason.includes('15 Energy')) return 'You need 15 Energy to repair this system.'
-  if (reason.includes('not currently damaged')) return 'This system is not damaged, so it does not need repairs.'
-  if (reason.includes('damaged')) return 'This system is damaged. Repair it before changing modes.'
-  if (reason.includes('already operating')) return 'This system is already using this mode.'
-  if (reason.includes('space weather incident')) return 'Choose a response to the space-weather event first.'
-  if (reason.includes('Mission is not')) return 'Start the mission before changing this system.'
-  return reason
-}
+export const BuildingPanel: React.FC<BuildingPanelProps> = ({
+  selectedObjectId,
+  state,
+  config,
+  onApplyAction,
+  onAdvanceDay,
+}) => {
+  const activeId = selectedObjectId || 'habitat';
+  const system = config.systems.find((s) => s.id === activeId);
+  const currentMode: SystemMode = system
+    ? state.systemModes[system.id as SystemId] || 'normal'
+    : 'normal';
 
-function ActionButton({
-  action,
-  check,
-  dispatch,
-  label,
-  pressed,
-}: {
-  action: PlayerAction
-  check: ActionCheck
-  dispatch: Props['dispatch']
-  label: string
-  pressed?: boolean
-}) {
-  const reason = check.allowed ? undefined : kidFriendlyReason(check.reason)
-  const tooltipId = `building-action-${action.systemId}-${action.type === 'SET_SYSTEM_MODE' ? action.mode : 'repair'}`
+  const activeEffects = system?.effectsByMode[currentMode] || system?.effectsByMode['normal'] || {};
 
-  return (
-    <div
-      className="group relative"
-      tabIndex={check.allowed ? undefined : 0}
-      title={reason}
-      aria-describedby={reason ? tooltipId : undefined}
-    >
-      <button
-        type="button"
-        disabled={!check.allowed}
-        aria-pressed={pressed}
-        aria-describedby={reason ? tooltipId : undefined}
-        className="w-full rounded-md border border-line bg-vacuum px-3 py-2 text-sm font-semibold text-regolith transition-colors hover:border-nominal hover:text-nominal disabled:cursor-not-allowed disabled:opacity-50"
-        onClick={() => dispatch({ type: 'APPLY_ACTION', payload: action })}
-      >
-        {label}
-      </button>
-      {reason && (
-        <span
-          id={tooltipId}
-          role="tooltip"
-          className="invisible absolute bottom-full left-0 z-10 mb-2 w-56 rounded-md border border-line bg-deck p-2 text-xs font-normal text-regolith opacity-0 shadow-lg transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
-        >
-          {reason}
+  const getStatusBadge = () => {
+    if (!system) return null;
+    if (currentMode === 'damaged') {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-black">
+          <AlertOctagon className="w-3.5 h-3.5" /> Damaged
         </span>
-      )}
-    </div>
-  )
-}
-
-export function BuildingPanel({ system, mode, state, dispatch }: Props) {
-  if (!system || !mode) {
-    return (
-      <section className="rounded-lg border border-line bg-deck p-5" aria-live="polite">
-        <p className="flex items-center gap-2 text-dust"><MousePointerClick size={16} aria-hidden /> Select a building on the map to see what it does.</p>
-      </section>
-    )
-  }
-  const fx = system.effectsByMode[mode] ?? {}
-  const tone = mode === 'damaged' ? 'critical' : mode === 'normal' ? 'nominal' : 'caution'
-  const modeActions = selectableModes.map(({ mode: targetMode, label }) => {
-    const action: PlayerAction = { type: 'SET_SYSTEM_MODE', systemId: system.id, mode: targetMode }
-    return {
-      action,
-      check: canPerformAction(state, action),
-      label,
-      pressed: mode === targetMode,
+      );
     }
-  })
-  const repairAction: PlayerAction = { type: 'REPAIR_SYSTEM', systemId: system.id }
-  const repairCheck = canPerformAction(state, repairAction)
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-black">
+        <CheckCircle2 className="w-3.5 h-3.5" /> Operating Normally
+      </span>
+    );
+  };
+
+  const getHeaderInfo = () => {
+    if (system) {
+      return {
+        name: system.name,
+        explainer: system.explainer,
+        role: system.role,
+        icon:
+          system.id === 'solar' ? (
+            <Zap className="w-6 h-6 text-amber-400" />
+          ) : system.id === 'habitat' ? (
+            <Home className="w-6 h-6 text-[var(--color-action)]" />
+          ) : (
+            <SproutIcon className="w-6 h-6 text-[var(--color-nominal)]" />
+          ),
+      };
+    }
+
+    switch (activeId) {
+      case 'crew':
+        return {
+          name: 'Astronaut Crew',
+          role: 'Moonbase human personnel',
+          explainer: 'Astronauts need constant oxygen, water, and food every single day to survive.',
+          icon: <Users className="w-6 h-6 text-[var(--color-action)]" />,
+        };
+      case 'rover':
+        return {
+          name: 'Autonomous Lunar Rover',
+          role: 'Surface exploration vehicle',
+          explainer: 'Explores dark lunar craters and scans mineral core samples for extra space science points.',
+          icon: <Compass className="w-6 h-6 text-sky-400" />,
+        };
+      case 'comms':
+        return {
+          name: 'Communications Dish',
+          role: 'Earth telemetry link',
+          explainer: 'Transmits outpost research telemetry and status reports back to NASA Mission Control on Earth.',
+          icon: <Radio className="w-6 h-6 text-orange-400" />,
+        };
+      default:
+        return {
+          name: 'Habitat & Life Support',
+          role: 'Environmental control unit',
+          explainer: 'Recycles air and water for astronaut survival.',
+          icon: <Home className="w-6 h-6 text-[var(--color-action)]" />,
+        };
+    }
+  };
+
+  const header = getHeaderInfo();
+
+  const renderRepairButton = () => {
+    if (!system || currentMode !== 'damaged') return null;
+    const action: PlayerAction = { type: 'REPAIR_SYSTEM', systemId: system.id };
+    const check = canPerformAction(state, action);
+
+    return (
+      <button
+        onClick={() => onApplyAction(action)}
+        disabled={!check.allowed}
+        className={`w-full py-3.5 px-4 rounded-xl font-extrabold text-sm btn-chunky flex items-center justify-center gap-2 cursor-pointer transition ${
+          check.allowed
+            ? 'bg-[var(--color-action)] text-white hover:bg-[var(--color-action-hover)]'
+            : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
+        }`}
+      >
+        <Wrench className="w-4 h-4" />
+        <span>Emergency Repair (-15 Energy)</span>
+        {!check.allowed && (
+          <span className="text-xs font-semibold text-red-400 flex items-center gap-1 ml-2">
+            <AlertTriangle className="w-3.5 h-3.5" /> {check.reason}
+          </span>
+        )}
+      </button>
+    );
+  };
+
+  const formatResourceValue = (val?: number) => {
+    if (val === undefined || val === 0) return '0';
+    return val > 0 ? `+${val}` : `${val}`;
+  };
 
   return (
-    <section className="rounded-lg border border-line bg-deck p-5" aria-live="polite">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold text-white">{system.name}</h2>
-        <StatusPill tone={tone}>{modeLabel[mode]}</StatusPill>
+    <div className="w-full bg-[var(--color-deck)] border-2 border-[var(--color-line)] rounded-3xl p-6 shadow-xl text-[var(--color-regolith)] flex flex-col justify-between space-y-6">
+      {/* 1. Header Section */}
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-2xl font-black flex items-center gap-2 text-white">
+            {header.icon}
+            <span>{header.name}</span>
+          </h2>
+          {getStatusBadge()}
+        </div>
+        <p className="text-xs font-bold text-[var(--color-dust)]">{header.role}</p>
+        <p className="text-sm font-semibold text-slate-300 leading-relaxed pt-1">
+          {header.explainer}
+        </p>
       </div>
-      <p className="mt-1 text-sm text-dust">{system.role}</p>
-      <p className="mt-3 max-w-prose text-sm leading-relaxed">{system.explainer}</p>
-      <h3 className="mt-4 flex items-center gap-2 text-sm font-semibold text-regolith">Daily effect <MockBadge label="Game units, mock values" /></h3>
-      <ul className="mt-2 grid grid-cols-2 gap-1 text-sm">
-        {Object.entries(fx).map(([k, v]) => (
-          <li key={k} className="flex justify-between rounded bg-vacuum px-2 py-1">
-            <span className="capitalize">{k}</span>
-            <span className={v < 0 ? 'text-caution' : 'text-nominal'}>{v > 0 ? '+' : ''}{v}</span>
-          </li>
-        ))}
-        {Object.keys(fx).length === 0 && <li className="col-span-2 text-dust">No effect in this mode.</li>}
-      </ul>
-      <div className="mt-5 border-t border-line pt-4">
-        <h3 className="text-sm font-semibold text-regolith">System controls</h3>
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          {modeActions.map(({ action, check, label, pressed }) => (
-            <ActionButton
-              key={label}
-              action={action}
-              check={check}
-              dispatch={dispatch}
-              label={label}
-              pressed={pressed}
-            />
-          ))}
+
+      {/* 2. Constant Daily Resource Rates */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-black uppercase tracking-wider text-[var(--color-dust)]">
+            Constant Daily Rates
+          </span>
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-400/90 bg-amber-500/10 px-2.5 py-0.5 rounded-md border border-amber-500/20">
+            <FlaskConical className="w-3 h-3" /> Fixed per day
+          </span>
         </div>
-        <div className="mt-2">
-          <ActionButton
-            action={repairAction}
-            check={repairCheck}
-            dispatch={dispatch}
-            label={`Repair · 15 Energy`}
-          />
-        </div>
-        {repairCheck.allowed && (
-          <p className="mt-2 flex items-center gap-1 text-xs text-caution">
-            <Wrench size={12} aria-hidden /> Repair restores this system to normal operation.
-          </p>
+
+        {system ? (
+          <div className="grid grid-cols-2 gap-3 bg-slate-900/80 p-4 rounded-2xl border border-slate-700/70 font-bold text-sm">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
+              <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
+                <Zap className="w-4 h-4 text-amber-400" /> Energy
+              </span>
+              <span className={activeEffects.energy && activeEffects.energy > 0 ? 'text-emerald-400 font-black' : activeEffects.energy && activeEffects.energy < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
+                {formatResourceValue(activeEffects.energy)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
+              <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
+                <Wind className="w-4 h-4 text-sky-400" /> Oxygen
+              </span>
+              <span className={activeEffects.oxygen && activeEffects.oxygen > 0 ? 'text-emerald-400 font-black' : activeEffects.oxygen && activeEffects.oxygen < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
+                {formatResourceValue(activeEffects.oxygen)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
+              <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
+                <Droplets className="w-4 h-4 text-blue-400" /> Water
+              </span>
+              <span className={activeEffects.water && activeEffects.water > 0 ? 'text-emerald-400 font-black' : activeEffects.water && activeEffects.water < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
+                {formatResourceValue(activeEffects.water)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
+              <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
+                <Utensils className="w-4 h-4 text-emerald-400" /> Food
+              </span>
+              <span className={activeEffects.food && activeEffects.food > 0 ? 'text-emerald-400 font-black' : activeEffects.food && activeEffects.food < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
+                {formatResourceValue(activeEffects.food)}
+              </span>
+            </div>
+          </div>
+        ) : activeId === 'crew' ? (
+          <div className="grid grid-cols-2 gap-3 bg-slate-900/80 p-4 rounded-2xl border border-slate-700/70 font-bold text-sm text-red-400">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
+              <span className="text-slate-300 flex items-center gap-1.5"><Wind className="w-4 h-4" /> Oxygen:</span>
+              <span className="font-black">-8</span>
+            </div>
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
+              <span className="text-slate-300 flex items-center gap-1.5"><Droplets className="w-4 h-4" /> Water:</span>
+              <span className="font-black">-5</span>
+            </div>
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
+              <span className="text-slate-300 flex items-center gap-1.5"><Utensils className="w-4 h-4" /> Food:</span>
+              <span className="font-black">-8</span>
+            </div>
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60 text-slate-400">
+              <span className="flex items-center gap-1.5"><Zap className="w-4 h-4" /> Energy:</span>
+              <span>0</span>
+            </div>
+          </div>
+        ) : (
+          <div className="p-4 bg-slate-900/80 rounded-2xl border border-slate-700/70 text-xs font-semibold text-slate-300">
+            Surface hardware system. Choose an action below to dispatch commands.
+          </div>
         )}
       </div>
-    </section>
-  )
+
+      {/* 3. Actions & Maintenance */}
+      <div className="space-y-3">
+        {renderRepairButton()}
+
+        {system?.id === 'solar' && currentMode !== 'damaged' && (
+          <button
+            onClick={() => onApplyAction({ type: 'CLEAN_SOLAR_PANELS' })}
+            className="w-full py-3.5 px-4 rounded-xl bg-slate-800 border border-slate-700 text-amber-300 font-extrabold text-xs btn-chunky flex items-center justify-center gap-2 hover:border-amber-400 transition cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4" /> Clean Solar Dust (-5 Energy)
+          </button>
+        )}
+
+        {activeId === 'rover' && (
+          <button
+            onClick={() => onApplyAction({ type: 'ROVER_COLLECT_SAMPLES' })}
+            className="w-full py-3.5 px-4 rounded-xl bg-[var(--color-action)] text-white font-extrabold text-sm btn-chunky flex items-center justify-center gap-2 hover:bg-[var(--color-action-hover)] transition cursor-pointer"
+          >
+            <Compass className="w-4 h-4" /> Scan Lunar Samples (-20 E, +100 Science)
+          </button>
+        )}
+
+        {activeId === 'comms' && (
+          <button
+            onClick={() => onApplyAction({ type: 'COMMS_TRANSMIT_REPORT' })}
+            className="w-full py-3.5 px-4 rounded-xl bg-[var(--color-action)] text-white font-extrabold text-sm btn-chunky flex items-center justify-center gap-2 hover:bg-[var(--color-action-hover)] transition cursor-pointer"
+          >
+            <Radio className="w-4 h-4" /> Send Data to Earth (-15 E, +50 Science)
+          </button>
+        )}
+      </div>
+
+      {/* 4. Learn Science Link */}
+      {system?.lessonId && (
+        <div className="pt-2 border-t border-[var(--color-line)]">
+          <Link
+            to={`/learn/${system.lessonId}`}
+            className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-slate-800/80 border border-slate-700 text-white font-extrabold text-xs hover:border-[var(--color-action)] transition"
+          >
+            <BookOpen className="w-4 h-4 text-[var(--color-action)]" />
+            <span>Learn science behind {system.name}</span>
+          </Link>
+        </div>
+      )}
+
+      {/* 5. ADVANCE DAY BUTTON AT THE BOTTOM OF SIDE PANEL */}
+      <div className="pt-4 border-t-2 border-[var(--color-line)]">
+        <button
+          onClick={onAdvanceDay}
+          disabled={!!state.pendingEventId}
+          className="w-full py-4 px-6 bg-[var(--color-action)] text-white font-black text-base rounded-2xl btn-chunky flex items-center justify-center gap-2 cursor-pointer hover:bg-[var(--color-action-hover)] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg transition"
+        >
+          <span>Advance Day</span>
+          <ArrowRight className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+function SproutIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" {...props}>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19V5m0 0C9 5 4 7 4 12c0 3 2 5.5 5 6.5M12 5c3 0 8 2 8 7 0 3-2 5.5-5 6.5" />
+    </svg>
+  );
 }

@@ -1,22 +1,30 @@
-import { createContext, useContext, useReducer, type Dispatch, type ReactNode } from 'react'
-import type { MissionState } from '../../domain/types'
-import { initialMission, missionReducer, type MissionAction } from './missionReducer'
+import React, { createContext, useContext, useReducer, type ReactNode } from 'react';
+import type { MissionState, MissionConfig } from '../../domain/types';
+import { missionReducer, initialMission, type MissionAction } from './missionReducer';
+import { LUNAR_SCENARIO } from '../../data/lunarScenario';
 
-interface MissionContextValue {
-  state: MissionState
-  dispatch: Dispatch<MissionAction>
+interface MissionContextType {
+  state: MissionState;
+  config: MissionConfig;
+  dispatch: React.Dispatch<MissionAction>;
 }
 
-const MissionContext = createContext<MissionContextValue | null>(null)
+const MissionContext = createContext<MissionContextType | undefined>(undefined);
 
-/** Lives above the router's routes, so mission state survives page changes. */
-export function MissionProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(missionReducer, undefined, initialMission)
-  return <MissionContext.Provider value={{ state, dispatch }}>{children}</MissionContext.Provider>
-}
+export const MissionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [state, dispatch] = useReducer(missionReducer, initialMission);
 
-export function useMission() {
-  const ctx = useContext(MissionContext)
-  if (!ctx) throw new Error('useMission must be used inside <MissionProvider>')
-  return ctx
-}
+  return (
+    <MissionContext.Provider value={{ state, config: LUNAR_SCENARIO, dispatch }}>
+      {children}
+    </MissionContext.Provider>
+  );
+};
+
+export const useMission = (): MissionContextType => {
+  const context = useContext(MissionContext);
+  if (!context) {
+    throw new Error('useMission must be used within a MissionProvider');
+  }
+  return context;
+};

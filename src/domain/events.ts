@@ -1,157 +1,130 @@
 import type { MissionState } from './types';
 import { getSepEvents } from '../data/donki';
+import { RANDOM_SCENARIO_POOL, type DynamicIncident } from '../data/eventsData';
+import { nextRandom } from './random';
 
-export interface IncidentChoice {
-  id: string;
-  label: string;
-  kidDescription: string;
-  tradeoffExplanation: string;
-  lessonId?: string;
-  effect: (state: MissionState) => MissionState;
-}
-
-export interface DynamicIncident {
-  id: string;
-  day: number;
-  title: string;
-  subtitle: string;
-  description: string;
-  nasaContext?: {
-    eventTime: string;
-    instruments: string[];
-    linkedFlares: number;
-    linkedCmes: number;
-    disclaimer: string;
-  };
-  choices: IncidentChoice[];
-}
-
-/**
- * Generates dynamic incidents for a 30-day mission, mapping real NASA DONKI SEP satellite records.
- */
 export function getEventForDay(day: number, state: MissionState): DynamicIncident | null {
+  if (day === 1) return null;
+
+  // RULE: At most one event per day!
+  if (state.decisions.some((d) => d.day === day)) {
+    return null;
+  }
+
   const donkiEvents = getSepEvents();
   const sepRecord = donkiEvents.length > 0 ? donkiEvents[day % donkiEvents.length] : null;
 
+  // 1. Scripted Anchors (Days 4, 12, 22)
   if (day === 4) {
     return {
       id: 'power-fault-day-4',
       day: 4,
-      title: '⚡ Power Grid Short Circuit',
-      subtitle: 'Solar Array Transformer Overheat',
-      description: 'Lunar regolith dust caused a transformer junction overload! Solar Array energy production drops.',
+      isScripted: true,
+      title: 'Power Grid Short Circuit',
+      subtitle: 'Solar Array Overheat',
+      description: 'Lunar regolith dust caused a power junction overload! Solar Array energy production drops until repaired.',
+      affectedSystemId: 'solar',
       choices: [
         {
           id: 'repair-now',
           label: 'Perform Immediate Repair',
-          kidDescription: 'Use spare parts and power right away to fix the array.',
-          tradeoffExplanation: 'Costs 10 Energy immediately, but returns Solar Array to Normal mode.',
+          kidDescription: 'Use spare parts and energy right away to fix the array.',
+          tradeoffExplanation: 'Costs 10 Energy immediately, returns Solar Array to 100% output.',
           effect: (s) => ({
             ...s,
             systemModes: { ...s.systemModes, solar: 'normal' },
             resources: { ...s.resources, energy: Math.max(0, s.resources.energy - 10) },
-            eventLog: [`Day ${s.day}: Emergency repairs fixed the solar power grid!`, ...s.eventLog],
+            eventLog: [`Day ${s.day}: Quick repairs fixed the solar power grid!`, ...s.eventLog],
           }),
         },
         {
-          id: 'conserve-power',
-          label: 'Accept Damaged Output',
-          kidDescription: 'Leave it damaged for now and conserve power.',
-          tradeoffExplanation: 'Saves immediate energy, but Solar Array remains in Damaged mode (+15 Energy/day).',
+          id: 'delay-repair',
+          label: 'Delay Repair',
+          kidDescription: 'Leave it damaged for today to save instant energy.',
+          tradeoffExplanation: 'Solar Array remains in damaged mode (+18 Energy/day instead of +45).',
           effect: (s) => ({
             ...s,
             systemModes: { ...s.systemModes, solar: 'damaged' },
-            eventLog: [`Day ${s.day}: Power fault unaddressed. Solar array operating in damaged mode.`, ...s.eventLog],
+            eventLog: [`Day ${s.day}: Power fault left unaddressed. Solar output reduced.`, ...s.eventLog],
           }),
         },
       ],
     };
   }
 
-  if (day === 10 || day === 22) {
+  if (day === 12 || day === 22) {
     const timeStr = sepRecord?.eventTime ? sepRecord.eventTime.slice(0, 10) : '2025-01-04';
     return {
       id: `solar-storm-day-${day}`,
       day,
-      title: '🌞 NASA Alert: Solar Particle Event (SEP)',
-      subtitle: 'High-Energy Proton Stream Approaching Lunar Surface',
-      description: `NASA DONKI satellite alert! Real satellite observation from ${timeStr}. High radiation levels endanger moonbase operations.`,
+      isScripted: true,
+      title: 'NASA Alert: Solar Particle Event (SEP)',
+      subtitle: 'High-Energy Radiation Surge',
+      description: `Real NASA DONKI satellite record from ${timeStr}. High solar radiation threatens astronauts on the surface.`,
+      affectedSystemId: 'habitat',
       nasaContext: sepRecord
         ? {
             eventTime: sepRecord.eventTime,
             instruments: sepRecord.instruments,
             linkedFlares: sepRecord.linkedFlares,
             linkedCmes: sepRecord.linkedCmes,
-            disclaimer: 'DONKI data provided by NASA CCMC (Earth-Moon orbit space weather monitoring). Prototyping research quality.',
+            disclaimer: 'DONKI real-time data provided by NASA CCMC. Prototyping research quality.',
           }
         : undefined,
       choices: [
         {
           id: 'bunker-shelter',
           label: 'Order Crew to Storm Shelter',
-          kidDescription: 'Move crew into the underground shielded habitat module.',
-          tradeoffExplanation: 'Keeps crew 100% safe! Pauses greenhouse operations today.',
+          kidDescription: 'Move crew into the underground shielded bunker module.',
+          tradeoffExplanation: 'Keeps crew 100% safe from solar radiation.',
           lessonId: 'radiation-shelter',
           effect: (s) => ({
             ...s,
-            systemModes: { ...s.systemModes, greenhouse: 'paused' },
-            crewCondition: s.crewCondition === 'critical' ? 'at-risk' : 'stable',
-            eventLog: [`Day ${s.day}: Crew safely sheltered underground. Greenhouse paused for safety.`, ...s.eventLog],
+            radiation: 'protected',
+            eventLog: [`Day ${s.day}: Crew safely sheltered underground during Solar Particle Event.`, ...s.eventLog],
           }),
         },
         {
           id: 'boost-deflection',
-          label: 'Divert Power to Radiation Shields',
-          kidDescription: 'Pump extra electrical energy into habitat electromagnetic shields.',
-          tradeoffExplanation: 'Costs 25 Energy, but allows crew to stay active and greenhouse to run normally.',
+          label: 'Power Up Radiation Shields',
+          kidDescription: 'Pump electrical energy into habitat electromagnetic shields.',
+          tradeoffExplanation: 'Costs 25 Energy, keeps crew safe on the surface.',
           lessonId: 'radiation-shelter',
           effect: (s) => ({
             ...s,
+            radiation: 'protected',
             resources: { ...s.resources, energy: Math.max(0, s.resources.energy - 25) },
-            eventLog: [`Day ${s.day}: Diverted 25 Energy to radiation shields. Outpost kept working.`, ...s.eventLog],
+            eventLog: [`Day ${s.day}: Diverted 25 Energy to radiation shields. Outpost safe.`, ...s.eventLog],
           }),
         },
       ],
     };
   }
 
-  if (day === 18) {
-    return {
-      id: 'water-recycler-leak-day-18',
-      day: 18,
-      title: '💧 Water Recycler Filter Clog',
-      subtitle: 'Life Support Fluid Loop Warning',
-      description: 'Lunar regolith dust clogged the primary water reclamation unit.',
-      choices: [
-        {
-          id: 'clean-filter',
-          label: 'Flush & Clean Filters',
-          kidDescription: 'Use pure water to flush out dust particles.',
-          tradeoffExplanation: 'Uses 15 Water now to clean system and avoid long-term shortages.',
-          lessonId: 'life-support',
-          effect: (s) => ({
-            ...s,
-            resources: { ...s.resources, water: Math.max(0, s.resources.water - 15) },
-            systemModes: { ...s.systemModes, habitat: 'normal' },
-            eventLog: [`Day ${s.day}: Flushed water recycler with 15 Water. ECLSS fully operational.`, ...s.eventLog],
-          }),
-        },
-        {
-          id: 'pause-greenhouse-water',
-          label: 'Throttle Greenhouse Irrigation',
-          kidDescription: 'Save water by cutting back on greenhouse plant watering today.',
-          tradeoffExplanation: 'Preserves current water tank levels, but sets Greenhouse to Conserve mode.',
-          effect: (s) => ({
-            ...s,
-            systemModes: { ...s.systemModes, greenhouse: 'conserve' },
-            eventLog: [`Day ${s.day}: Throttled greenhouse irrigation to protect life-support water supply.`, ...s.eventLog],
-          }),
-        },
-      ],
-    };
+  // 2. Random Events (35% chance, max 2 consecutive event days)
+  const hasEventOnDayMinus1 = state.decisions.some((d) => d.day === day - 1);
+  const hasEventOnDayMinus2 = state.decisions.some((d) => d.day === day - 2);
+  if (hasEventOnDayMinus1 && hasEventOnDayMinus2) {
+    return null;
   }
 
-  return null;
+  const [roll] = nextRandom(state.rngState);
+  if (roll > 0.35) {
+    return null;
+  }
+
+  const usedIds = state.decisions.map((d) => d.eventId);
+  const availablePool = RANDOM_SCENARIO_POOL.filter((item) => !usedIds.includes(item.id));
+  if (availablePool.length === 0) return null;
+
+  const poolIdx = Math.floor(roll * availablePool.length);
+  const selected = availablePool[poolIdx];
+
+  return {
+    ...selected,
+    day,
+    isScripted: false,
+  };
 }
 
 export function resolveEvent(state: MissionState, choiceId: string): MissionState {
@@ -167,6 +140,14 @@ export function resolveEvent(state: MissionState, choiceId: string): MissionStat
   return {
     ...updatedState,
     pendingEventId: undefined,
-    eventLog: [`Event ${incident.id} resolved`, ...updatedState.eventLog],
+    decisions: [
+      ...updatedState.decisions,
+      {
+        day: state.day,
+        eventId: incident.id,
+        choiceId: chosenOption.id,
+        summary: chosenOption.label,
+      },
+    ],
   };
 }

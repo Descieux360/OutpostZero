@@ -1,28 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
 @import "tailwindcss";
 
-/* Design tokens. Teal = nominal, amber = needs attention, red = critical. */
 @theme {
-  --color-vacuum: #0a1220;
-  --color-deck: #111c2e;
-  --color-deck-raised: #182640;
-  --color-line: #2a3b57;
-  --color-regolith: #cdc7b8;
-  --color-dust: #8d96a7;
-  --color-nominal: #5fd0c8;
-  --color-caution: #f0b24a;
-  --color-critical: #ff6b5e;
-  --font-sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Archivo", "Public Sans", system-ui, sans-serif;
+  --font-sans: 'Nunito', system-ui, -apple-system, sans-serif;
+  --color-vacuum: #0B0F19;      /* Deep Space Black */
+  --color-deck: #161F33;        /* High-Contrast Dark Slate Panel */
+  --color-deck-raised: #212E4A; /* Elevated Slate Sub-container */
+  --color-line: #374768;        /* Sharp High-Visibility Border */
+  --color-regolith: #F8FAFC;    /* Ultra Crisp White Text (AAA Readable) */
+  --color-dust: #94A3B8;        /* Soft Readable Slate Grey */
+  --color-nominal: #10B981;     /* Vivid Emerald Green */
+  --color-caution: #F59E0B;     /* Vivid Amber Yellow */
+  --color-critical: #EF4444;    /* Vivid Bright Red */
+  --color-action: #F97316;      /* High Visibility Action Orange */
+  --color-action-hover: #EA580C;
 }
 
-html, body, #root { min-height: 100%; }
 body {
-  margin: 0;
-  background: var(--color-vacuum);
+  background-color: var(--color-vacuum);
   color: var(--color-regolith);
   font-family: var(--font-sans);
-  font-variant-numeric: tabular-nums;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
-h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.01em; }
-:focus-visible { outline: 2px solid var(--color-nominal); outline-offset: 3px; }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Chunky Pressed-Down Button Styling */
+.btn-chunky {
+  border-radius: 0.875rem;
+  font-weight: 800;
+  transition: all 0.15s ease-in-out;
+  box-shadow: 0 4px 0 0 var(--color-line);
+}
+.btn-chunky:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 0 var(--color-line);
+}
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

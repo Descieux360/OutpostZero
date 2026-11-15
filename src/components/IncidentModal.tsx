@@ -1,86 +1,67 @@
-import { useRef, type Dispatch } from 'react'
-import type { DynamicIncident } from '../domain/events'
-import type { MissionAction } from '../features/mission/missionReducer'
+import React from 'react';
+import { Siren, ClipboardList, Satellite, Scale } from 'lucide-react';
+import { type DynamicIncident } from '../data/eventsData';
 
-interface Props {
-  incident: DynamicIncident
-  dispatch: Dispatch<MissionAction>
+interface IncidentModalProps {
+  incident: DynamicIncident;
+  onResolveChoice: (choiceId: string) => void;
 }
 
-export function IncidentModal({ incident, dispatch }: Props) {
-  const choiceSubmitted = useRef(false)
-
-  const chooseOption = (choiceId: string) => {
-    if (choiceSubmitted.current) return
-    choiceSubmitted.current = true
-    dispatch({ type: 'RESOLVE_EVENT', choiceId })
-    dispatch({ type: 'ADVANCE_DAY' })
-  }
-
+export const IncidentModal: React.FC<IncidentModalProps> = ({ incident, onResolveChoice }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-vacuum/80 p-4">
-      <section
-        aria-labelledby="incident-title"
-        aria-modal="true"
-        className="my-auto w-full max-w-2xl rounded-xl border border-line border-t-4 border-t-critical bg-deck p-5 shadow-2xl sm:p-7"
-        role="dialog"
-      >
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-critical">
-          Incident response · Day {incident.day}
-        </p>
-        <h2 id="incident-title" className="mt-2 text-2xl font-bold text-white sm:text-3xl">
-          {incident.title}
-        </h2>
-        <p className="mt-1 text-sm font-semibold text-regolith">{incident.subtitle}</p>
-        <p className="mt-4 leading-relaxed text-regolith">{incident.description}</p>
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+      <div className="bg-[var(--color-deck)] border-4 border-[var(--color-line)] rounded-3xl max-w-lg w-full p-6 shadow-2xl text-[var(--color-regolith)]">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[var(--color-action)] text-white text-xs font-black rounded-full uppercase">
+            {incident.isScripted ? (
+              <>
+                <Siren className="w-3.5 h-3.5" /> Scripted Emergency
+              </>
+            ) : (
+              <>
+                <ClipboardList className="w-3.5 h-3.5" /> Scenario Event
+              </>
+            )}
+          </span>
+          <span className="text-xs font-bold text-[var(--color-dust)]">Day {incident.day} of 30</span>
+        </div>
 
+        <h2 className="text-2xl font-black text-white mb-1">{incident.title}</h2>
+        <p className="text-sm font-bold text-[var(--color-dust)] mb-4">{incident.subtitle}</p>
+
+        <p className="text-base font-semibold text-slate-200 bg-[var(--color-deck-raised)] p-4 rounded-2xl border-2 border-[var(--color-line)] mb-4 leading-relaxed">
+          {incident.description}
+        </p>
+
+        {/* Real NASA DONKI Satellite Citation Badge */}
         {incident.nasaContext && (
-          <aside className="mt-5 rounded-lg border border-caution/50 bg-vacuum p-4">
-            <p className="inline-flex rounded-full border border-caution/60 px-3 py-1 text-xs font-bold text-caution">
-              Real NASA DONKI satellite record
-            </p>
-            <dl className="mt-3 grid gap-2 text-sm text-regolith sm:grid-cols-2">
-              <div>
-                <dt className="text-xs text-regolith/70">Event time</dt>
-                <dd><time dateTime={incident.nasaContext.eventTime}>{incident.nasaContext.eventTime}</time></dd>
-              </div>
-              <div>
-                <dt className="text-xs text-regolith/70">Instruments</dt>
-                <dd>{incident.nasaContext.instruments.length} recorded</dd>
-              </div>
-              <div className="sm:col-span-2">
-                <dt className="text-xs text-regolith/70">Linked events</dt>
-                <dd>
-                  {incident.nasaContext.linkedFlares} flares · {incident.nasaContext.linkedCmes} CMEs
-                </dd>
-              </div>
-            </dl>
-            <p className="mt-3 border-t border-line pt-3 text-xs leading-relaxed text-regolith/70">
-              {incident.nasaContext.disclaimer}
-            </p>
-          </aside>
+          <div className="mb-6 p-4 rounded-2xl bg-blue-950/80 border-2 border-blue-500/40 text-xs text-blue-100 space-y-1">
+            <div className="font-black flex items-center gap-1.5 text-blue-300">
+              <Satellite className="w-4 h-4 text-blue-400" />
+              <span>REAL NASA DONKI SATELLITE RECORD</span>
+            </div>
+            <div>Timestamp: {incident.nasaContext.eventTime}</div>
+            <div>Detecting Instruments: {incident.nasaContext.instruments.join(', ') || 'SOHO / STEREO'}</div>
+            <div className="italic text-[11px] mt-2 text-blue-300/80">{incident.nasaContext.disclaimer}</div>
+          </div>
         )}
 
-        <div className="mt-6">
-          <h3 className="font-semibold text-white">Choose your response</h3>
-          <div className="mt-3 grid gap-3">
-            {incident.choices.map((choice) => (
-              <button
-                key={choice.id}
-                className="rounded-lg border border-line bg-vacuum p-4 text-left transition-colors hover:border-nominal focus-visible:border-nominal"
-                onClick={() => chooseOption(choice.id)}
-                type="button"
-              >
-                <span className="block font-semibold text-nominal">{choice.label}</span>
-                <span className="mt-1 block text-sm leading-relaxed text-regolith">{choice.kidDescription}</span>
-                <span className="mt-3 block text-sm leading-relaxed text-caution">
-                  Trade-off: {choice.tradeoffExplanation}
-                </span>
-              </button>
-            ))}
-          </div>
+        <div className="space-y-3">
+          {incident.choices.map((choice) => (
+            <button
+              key={choice.id}
+              onClick={() => onResolveChoice(choice.id)}
+              className="w-full text-left p-4 rounded-2xl border-2 border-[var(--color-line)] bg-slate-800 hover:bg-slate-700 hover:border-[var(--color-action)] btn-chunky transition cursor-pointer text-white"
+            >
+              <div className="font-black text-base text-white">{choice.label}</div>
+              <div className="text-xs font-semibold text-slate-300 mt-1">{choice.kidDescription}</div>
+              <div className="text-xs font-bold text-amber-400 mt-1.5 flex items-center gap-1">
+                <Scale className="w-3.5 h-3.5" /> Trade-off: {choice.tradeoffExplanation}
+              </div>
+            </button>
+          ))}
         </div>
-      </section>
+      </div>
     </div>
-  )
-}
+  );
+};

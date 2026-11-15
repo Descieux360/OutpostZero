@@ -6,6 +6,7 @@ export interface MissionDebriefSummary {
   totalDays: number;
   finalResources: MissionState['resources'];
   survivalScore: number;
+  scienceScore: number;
   keyTakeaways: string[];
   sourcesUsed: string[];
 }
@@ -26,25 +27,11 @@ export function generateDebrief(state: MissionState, config: MissionConfig): Mis
 
   const totalResourceBalance =
     state.resources.energy + state.resources.oxygen + state.resources.water + state.resources.food;
-
-  const maxEnergy = config.resources.find((r) => r.id === 'energy')?.max || 200;
-  const maxPossible = maxEnergy * 4;
+  const maxPossible = 200 * 4;
   const survivalScore = Math.min(
     100,
     Math.round((daysCompleted / config.totalDays) * 70 + (totalResourceBalance / maxPossible) * 30)
   );
-
-  const keyTakeaways: string[] = [
-    'Energy production is foundational: Without power from Solar Arrays, Life Support and Greenhouses shut down.',
-    'Closed-Loop Recycling: Water and Oxygen must be continually reclaimed from cabin air and moisture.',
-    'Space Weather Awareness: Real NASA DONKI satellite monitoring allows astronaut teams to prepare for high-radiation Solar Particle Events.',
-  ];
-
-  const sourcesUsed: string[] = [
-    'NASA DONKI (Space Weather Database Of Notifications, Knowledge, Information) - Solar Energetic Particle (SEP) Events (Jan 2025 Snapshot)',
-    'Canadian Space Agency (CSA): Deep Space Food Challenge & Life Support Systems Constraints',
-    'NASA Human Research Program: Radiation Shielding Guidelines for Lunar Surface Exploration',
-  ];
 
   return {
     status,
@@ -52,7 +39,16 @@ export function generateDebrief(state: MissionState, config: MissionConfig): Mis
     totalDays: config.totalDays,
     finalResources: state.resources,
     survivalScore,
-    keyTakeaways,
-    sourcesUsed,
+    scienceScore: state.scienceScore || 0,
+    keyTakeaways: [
+      'Power Is Everything: Without electricity from solar panels, air scrubbers and water recyclers stop running.',
+      'Water Recycling Saves Lives: Closed-loop recycling recovers water from humidity to keep crops and astronauts alive.',
+      'Real NASA Satellite Data: Real-time NASA DONKI satellite alerts let lunar crews shelter before Solar Particle Events hit.',
+    ],
+    sourcesUsed: [
+      'NASA DONKI (Space Weather Database Of Notifications, Knowledge, Information) - Solar Energetic Particle (SEP) Records',
+      'Canadian Space Agency (CSA): Deep Space Food Challenge & Life Support Systems Guidelines',
+      'NASA Human Research Program: Lunar Habitat Shielding and Space Radiation Protection',
+    ],
   };
 }

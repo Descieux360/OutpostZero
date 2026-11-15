@@ -18,7 +18,7 @@ function BriefingRoute() {
   return (
     <BriefingScreen
       onBegin={() => {
-        dispatch({ type: 'START' }) // no-op if the mission is already active
+        dispatch({ type: 'START' })
         navigate('/mission')
       }}
     />
@@ -26,19 +26,10 @@ function BriefingRoute() {
 }
 
 function MissionRoute() {
-  const { state, dispatch } = useMission()
-  const navigate = useNavigate()
-  // A refresh or a typed URL resets in-memory state, so send the player back through the briefing.
+  const { state } = useMission()
+  // A refresh or a typed URL resets in-memory state, redirecting to briefing
   if (state.missionStatus === 'briefing') return <Navigate to="/briefing" replace />
-  return (
-    <MissionPage
-      state={state}
-      dispatch={(action) => {
-        dispatch(action)
-        if (action.type === 'RESTART') navigate('/briefing')
-      }}
-    />
-  )
+  return <MissionPage />
 }
 
 function NotFound() {
@@ -46,7 +37,9 @@ function NotFound() {
     <main className="mx-auto max-w-xl px-6 py-24">
       <h1 className="text-3xl font-bold text-white">Page not found</h1>
       <p className="mt-3">That address doesn’t exist in Outpost Zero.</p>
-      <Link to="/" className="mt-6 inline-block rounded-md bg-nominal px-5 py-3 font-semibold text-vacuum">Back to start</Link>
+      <Link to="/" className="mt-6 inline-block rounded-md bg-nominal px-5 py-3 font-semibold text-vacuum">
+        Back to start
+      </Link>
     </main>
   )
 }
