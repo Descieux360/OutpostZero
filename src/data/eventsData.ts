@@ -30,16 +30,16 @@ export interface DynamicIncident {
 export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScripted'>> = [
   {
     id: 'dust-on-panels',
-    title: '🧹 Poussière lunaire sur les panneaux',
-    subtitle: 'Production solaire réduite',
-    description: 'De la poussière lunaire s’est déposée sur les panneaux. Leur production peut diminuer.',
+    title: '🧹 Moon Dust on Solar Panels',
+    subtitle: 'Reduced solar power',
+    description: 'Moon dust has settled on the solar panels, so they may make less electricity.',
     affectedSystemId: 'solar',
     choices: [
       {
         id: 'clean-dust',
-        label: 'Nettoyer les panneaux',
-        kidDescription: 'Utilise une action et un peu d’énergie pour enlever la poussière.',
-        tradeoffExplanation: 'Coûte 5 unités d’énergie et rétablit la production des panneaux.',
+        label: 'Clean the panels',
+        kidDescription: 'Use one action and a little energy to brush away the dust.',
+        tradeoffExplanation: 'Costs 5 Energy and restores the panels to full power.',
         effect: (s) => ({
           ...s,
           resources: { ...s.resources, energy: Math.max(0, s.resources.energy - 5) },
@@ -48,9 +48,9 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
       },
       {
         id: 'ignore-dust',
-        label: 'Laisser la poussière pour aujourd’hui',
-        kidDescription: 'Économise l’énergie, mais les panneaux restent poussiéreux.',
-        tradeoffExplanation: 'Réduit la production solaire pour aujourd’hui.',
+        label: 'Leave the dust for now',
+        kidDescription: 'Save energy, but the panels will stay dusty.',
+        tradeoffExplanation: 'Solar panels make less power today.',
         effect: (s) => ({
           ...s,
           systemModes: { ...s.systemModes, solar: 'conserve' },
@@ -61,15 +61,15 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
   },
   {
     id: 'rover-rock-discovery',
-    title: '🪨 Cristal lunaire mystérieux',
-    subtitle: 'Découverte du rover',
-    description: 'Le rover a repéré un cristal intéressant près d’un cratère ombragé.',
+    title: '🪨 A Mysterious Moon Crystal',
+    subtitle: 'Rover discovery',
+    description: 'The rover spotted an interesting crystal near a shadowy crater.',
     choices: [
       {
         id: 'analyze-rock',
-        label: 'Analyser l’échantillon',
-        kidDescription: 'Utilise de l’énergie pour analyser l’échantillon.',
-        tradeoffExplanation: 'Coûte 15 unités d’énergie et rapporte 50 points de science.',
+        label: 'Study the sample',
+        kidDescription: 'Use energy to learn more about the crystal.',
+        tradeoffExplanation: 'Costs 15 Energy and earns 50 Science points.',
         effect: (s) => ({
           ...s,
           resources: { ...s.resources, energy: Math.max(0, s.resources.energy - 15) },
@@ -79,9 +79,9 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
       },
       {
         id: 'skip-rock',
-        label: 'Continuer la route',
-        kidDescription: 'Économise l’électricité pour les systèmes essentiels.',
-        tradeoffExplanation: 'Aucun coût, mais aucun bonus scientifique.',
+        label: 'Keep moving',
+        kidDescription: 'Save electricity for the most important systems.',
+        tradeoffExplanation: 'Costs nothing, but earns no Science points.',
         effect: (s) => ({
           ...s,
           eventLog: [`Day ${s.day}: Rover passed by rock sample to conserve power.`, ...s.eventLog],
@@ -91,16 +91,16 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
   },
   {
     id: 'water-recycler-bubble',
-    title: '🧼 Bulle dans le circuit de recyclage',
-    subtitle: 'Petit problème du support-vie',
-    description: 'Une bulle d’air gêne le circuit de filtration de l’eau dans ce scénario.',
+    title: '🧼 A Bubble in the Recycling Loop',
+    subtitle: 'A small life-support problem',
+    description: 'An air bubble is slowing down the water filter in this simulation.',
     affectedSystemId: 'habitat',
     choices: [
       {
         id: 'flush-pipe',
-        label: 'Purger le circuit',
-        kidDescription: 'Utilise un peu d’eau propre pour dégager la bulle.',
-        tradeoffExplanation: 'Utilise 10 unités d’eau pour rétablir le débit.',
+        label: 'Flush the pipe',
+        kidDescription: 'Use a little clean water to push the bubble out.',
+        tradeoffExplanation: 'Uses 10 Water and gets the system flowing again.',
         effect: (s) => ({
           ...s,
           resources: { ...s.resources, water: Math.max(0, s.resources.water - 10) },
@@ -109,9 +109,9 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
       },
       {
         id: 'low-flow',
-        label: 'Recycler à débit réduit',
-        kidDescription: 'Fais fonctionner le filtre plus lentement aujourd’hui.',
-        tradeoffExplanation: 'Le support-vie passe en mode économie pour aujourd’hui.',
+        label: 'Use a slower flow',
+        kidDescription: 'Run the filter more slowly today.',
+        tradeoffExplanation: 'Life support switches to conserve mode for today.',
         effect: (s) => ({
           ...s,
           systemModes: { ...s.systemModes, habitat: 'conserve' },
@@ -122,16 +122,16 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
   },
   {
     id: 'greenhouse-nutrient-drift',
-    title: '🌱 Nutriments de la serre à vérifier',
-    subtitle: 'Équilibre du bac hydroponique',
-    description: 'Les plantes de la serre ont besoin d’un mélange nutritif adapté.',
+    title: '🌱 Check the Greenhouse Nutrients',
+    subtitle: 'Hydroponic growing balance',
+    description: 'The greenhouse plants need the right mix of nutrients to grow well.',
     affectedSystemId: 'greenhouse',
     choices: [
       {
         id: 'boost-minerals',
-        label: 'Ajouter des nutriments',
-        kidDescription: 'Donne un apport supplémentaire d’eau et de minéraux aux plantes.',
-        tradeoffExplanation: 'Coûte 12 unités d’eau, mais produit 15 unités de nourriture en plus.',
+        label: 'Add plant nutrients',
+        kidDescription: 'Give the plants extra water and minerals.',
+        tradeoffExplanation: 'Costs 12 Water, but grows 15 extra Food.',
         effect: (s) => ({
           ...s,
           resources: {
@@ -144,9 +144,9 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
       },
       {
         id: 'standard-mix',
-        label: 'Garder le programme habituel',
-        kidDescription: 'Conserve le programme d’arrosage habituel.',
-        tradeoffExplanation: 'Aucun coût supplémentaire ; croissance habituelle.',
+        label: 'Keep the usual schedule',
+        kidDescription: 'Keep watering the plants as usual.',
+        tradeoffExplanation: 'No extra cost, and the plants keep growing as normal.',
         effect: (s) => ({
           ...s,
           eventLog: [`Day ${s.day}: Maintained standard hydroponic feeding.`, ...s.eventLog],
@@ -156,15 +156,15 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
   },
   {
     id: 'crew-morale-movie',
-    title: '🍿 Moment de détente en équipage',
-    subtitle: 'Bien-être et repos de l’équipage',
-    description: 'Après une journée chargée, l’équipage souhaite partager un moment de détente.',
+    title: '🍿 Crew Movie Night',
+    subtitle: 'Crew well-being and rest',
+    description: 'After a busy day, the crew would like to relax and spend time together.',
     choices: [
       {
         id: 'host-movie',
-        label: 'Utiliser l’écran commun',
-        kidDescription: 'Utilise un peu d’électricité pour un moment de détente.',
-        tradeoffExplanation: 'Coûte 10 unités d’énergie ; le moral de l’équipage reste stable.',
+        label: 'Use the shared screen',
+        kidDescription: 'Use a little electricity for some crew fun.',
+        tradeoffExplanation: 'Costs 10 Energy and helps the crew feel better.',
         effect: (s) => ({
           ...s,
           resources: { ...s.resources, energy: Math.max(0, s.resources.energy - 10) },
@@ -174,9 +174,9 @@ export const RANDOM_SCENARIO_POOL: Array<Omit<DynamicIncident, 'day' | 'isScript
       },
       {
         id: 'early-bedtime',
-        label: 'Repos et lumières éteintes',
-        kidDescription: 'Économise l’énergie et permet à l’équipage de se reposer.',
-        tradeoffExplanation: 'Économise l’énergie, sans effet sur le moral.',
+        label: 'Turn in early',
+        kidDescription: 'Save energy and let the crew get some rest.',
+        tradeoffExplanation: 'Saves energy, but does not change crew morale.',
         effect: (s) => ({
           ...s,
           eventLog: [`Day ${s.day}: Crew turned lights out early to save power.`, ...s.eventLog],

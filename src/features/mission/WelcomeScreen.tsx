@@ -1,23 +1,99 @@
-import { Rocket } from 'lucide-react'
+import React from 'react';
+import { Rocket, Zap, Wind, Sun, Sparkles, ShieldCheck, Award, ArrowRight } from 'lucide-react';
 
 interface WelcomeScreenProps {
-  onContinue: () => void
+  onContinue: () => void;
 }
 
-export function WelcomeScreen({ onContinue }: WelcomeScreenProps) {
+export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onContinue }) => {
   return (
-    <main className="home-hero relative flex min-h-screen w-full flex-col justify-between overflow-hidden bg-[#06143D] bg-[url('/space-academy-hero.jpg')] bg-cover bg-center font-sans">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#06143D]/55 via-[#06143D]/10 to-[#06143D]/65" />
-      <section className="home-hero-content animate-enter relative z-10 mx-auto my-auto flex w-full max-w-5xl flex-col items-center px-5 py-16 text-center">
-        <p className="mb-4 rounded-full border border-cyan-100/25 bg-[#06143D]/50 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-cyan-100 shadow-lg backdrop-blur-sm sm:text-sm">Ta mission commence ici</p>
-        <h1 className="text-5xl font-black leading-[.95] tracking-tight text-white drop-shadow-[0_4px_16px_rgba(0,0,0,.65)] sm:text-7xl md:text-8xl">SPACE<br className="sm:hidden" /> ACADEMY</h1>
-        <button onClick={onContinue} className="home-play-button mt-9 inline-flex items-center justify-center gap-3 rounded-2xl border border-white/20 bg-gradient-to-r from-orange-500 to-orange-400 px-9 py-4 text-xl font-black tracking-[.12em] text-white shadow-[0_10px_35px_rgba(249,115,22,.35)] transition hover:scale-105 hover:from-orange-400 hover:to-yellow-400 focus-visible:outline focus-visible:outline-4 focus-visible:outline-cyan-200 active:scale-95">
-          <Rocket size={24} aria-hidden /> JOUER
-        </button>
+    <main className="relative min-h-screen w-full overflow-hidden bg-[#0B0F19] bg-[url('/hero.png')] bg-cover bg-center text-[#F8FAFC] flex flex-col justify-between font-sans select-none">
+      {/* 1. ATMOSPHERIC GRADIENT OVERLAY FOR TEXT READABILITY */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0B0F19]/75 via-[#0B0F19]/35 to-[#0B0F19]/90 backdrop-blur-[0.5px] z-0" />
+
+      {/* 2. TOP BADGE HEADER */}
+      <header className="relative z-10 pt-8 px-6 text-center flex justify-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-slate-700/80 bg-slate-900/80 px-4 py-2 text-xs font-black uppercase tracking-wider text-amber-300 shadow-xl backdrop-blur-md">
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span>NASA Space Apps Challenge · Youth Edition</span>
+        </div>
+      </header>
+
+      {/* 3. HERO MAIN CONTENT */}
+      <section className="relative z-10 my-auto mx-auto flex w-full max-w-4xl flex-col items-center px-6 py-8 text-center">
+        {/* Title & Tagline */}
+        <div className="space-y-3 mb-6">
+          <span className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.3em] text-[var(--color-action)]">
+            Moonbase Command Simulator
+          </span>
+          <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.9)]">
+            OUTPOST <span className="text-[var(--color-action)]">ZERO</span>
+          </h1>
+          <p className="text-lg sm:text-2xl font-black text-slate-200 max-w-2xl mx-auto pt-1 drop-shadow-md">
+            Command your own lunar station & keep your astronaut crew safe for 30 days!
+          </p>
+        </div>
+
+        {/* Primary Play Button */}
+        <div className="mb-10">
+          <button
+            onClick={onContinue}
+            className="group relative inline-flex items-center justify-center gap-3 rounded-2xl bg-[var(--color-action)] px-10 py-5 text-2xl font-black uppercase tracking-wider text-white shadow-[0_8px_0_0_#C2410C] transition hover:translate-y-[-2px] hover:bg-[var(--color-action-hover)] active:translate-y-[4px] active:shadow-[0_2px_0_0_#C2410C] cursor-pointer"
+          >
+            <Rocket className="w-8 h-8 transition-transform group-hover:rotate-12 group-hover:scale-110" />
+            <span>START MISSION</span>
+            <ArrowRight className="w-7 h-7 opacity-80 group-hover:translate-x-1" />
+          </button>
+        </div>
+
+        {/* 4. KID-FRIENDLY FEATURE CARDS (ENGLISH) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl text-left">
+          {/* Card 1: Solar Power */}
+          <div className="p-4 rounded-2xl bg-[#161F33]/90 border-2 border-[#374768] shadow-xl backdrop-blur-md">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mb-3">
+              <Zap className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-black text-white mb-1">Solar Power</h3>
+            <p className="text-xs font-semibold text-slate-300 leading-relaxed">
+              Clean moon dust off solar collectors to generate electricity for your base.
+            </p>
+          </div>
+
+          {/* Card 2: Life Support */}
+          <div className="p-4 rounded-2xl bg-[#161F33]/90 border-2 border-[#374768] shadow-xl backdrop-blur-md">
+            <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/40 text-sky-400 flex items-center justify-center mb-3">
+              <Wind className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-black text-white mb-1">Life Support</h3>
+            <p className="text-xs font-semibold text-slate-300 leading-relaxed">
+              Recycle air and water continuously so your astronauts stay healthy and active.
+            </p>
+          </div>
+
+          {/* Card 3: NASA Satellites */}
+          <div className="p-4 rounded-2xl bg-[#161F33]/90 border-2 border-[#374768] shadow-xl backdrop-blur-md">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mb-3">
+              <Sun className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-black text-white mb-1">NASA Satellites</h3>
+            <p className="text-xs font-semibold text-slate-300 leading-relaxed">
+              Respond to real-world solar radiation events detected by NASA DONKI sensors!
+            </p>
+          </div>
+        </div>
       </section>
-      <footer className="relative z-10 px-5 pb-7 pt-5 text-center">
-        <p className="text-base font-black tracking-wide text-yellow-200 drop-shadow-[0_2px_8px_rgba(0,0,0,.9)] sm:text-lg">Deviens un astronaute en jouant !</p>
+
+      {/* 5. FOOTER */}
+      <footer className="relative z-10 pb-6 pt-4 text-center border-t border-slate-800/80 bg-slate-950/70 backdrop-blur-sm">
+        <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-extrabold text-slate-300">
+          <span className="flex items-center gap-1.5 text-amber-300">
+            <Award className="w-4 h-4" /> Designed for Explorers (Ages 7–12)
+          </span>
+          <span className="flex items-center gap-1.5 text-emerald-400">
+            <ShieldCheck className="w-4 h-4" /> Interactive NASA Science Simulation
+          </span>
+        </div>
       </footer>
     </main>
-  )
-}
+  );
+};

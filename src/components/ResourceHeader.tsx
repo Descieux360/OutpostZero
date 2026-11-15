@@ -69,7 +69,7 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
       <div className="flex flex-wrap justify-between items-center gap-3 pb-2 border-b border-slate-800">
         <div className="flex items-center gap-2">
           <span className="text-xs font-black tracking-wider uppercase text-[var(--color-dust)]">
-            TÉLÉMÉTRIE DE LA BASE
+            OUTPOST TELEMETRY
           </span>
         </div>
 
@@ -77,19 +77,19 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
           {/* Science Score Badge */}
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-950/60 border border-sky-500/40 text-sky-300 text-xs font-black">
             <Award className="w-4 h-4 text-sky-400" />
-            <span>Science : {state.scienceScore || 0} pts</span>
+            <span>Science Score: {state.scienceScore || 0} pts</span>
           </div>
 
           {/* Radiation Shield Status Pill */}
           {state.radiation === 'protected' ? (
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-xs font-black">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Protection contre les radiations : ACTIVE</span>
+              <span>Radiation Shielding: PROTECTED</span>
             </div>
           ) : (
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/60 border border-amber-500/40 text-amber-400 text-xs font-black">
               <ShieldAlert className="w-4 h-4 text-amber-400" />
-              <span>Protection contre les radiations : NORMALE</span>
+              <span>Radiation Shielding: NOMINAL</span>
             </div>
           )}
         </div>
@@ -98,7 +98,7 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
       {/* 4 Core Resource Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {renderMetricCard(
-          'Énergie',
+          'Energy',
           state.resources.energy,
           'energy',
           'kWh',
@@ -107,7 +107,7 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
         )}
 
         {renderMetricCard(
-          'Oxygène',
+          'Oxygen',
           state.resources.oxygen,
           'oxygen',
           'L',
@@ -116,7 +116,7 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
         )}
 
         {renderMetricCard(
-          'Eau',
+          'Water',
           state.resources.water,
           'water',
           'L',
@@ -125,7 +125,7 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
         )}
 
         {renderMetricCard(
-          'Nourriture',
+          'Food',
           state.resources.food,
           'food',
           'Rations',

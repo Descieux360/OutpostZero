@@ -1,68 +1,74 @@
-import React from 'react';
-import { Flag, Zap, Droplets, Wind, Utensils, ArrowRight } from 'lucide-react';
-import type { MissionState } from '../domain/types';
+import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
+import { ArrowRight, Droplets, Flag, Utensils, Wind, Zap, type LucideIcon } from 'lucide-react'
+import type { MissionState } from '../domain/types'
 
 interface CheckpointModalProps {
-  state: MissionState;
-  onDismiss: () => void;
+  state: MissionState
+  onDismiss: () => void
 }
 
-export const CheckpointModal: React.FC<CheckpointModalProps> = ({ state, onDismiss }) => {
-  return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-      <div className="bg-[var(--color-deck)] border-4 border-[var(--color-line)] rounded-3xl max-w-md w-full p-6 shadow-2xl text-center text-[var(--color-regolith)]">
-        {/* Icon Header */}
-        <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[var(--color-action)]/20 border border-[var(--color-action)]/40 text-[var(--color-action)] flex items-center justify-center shadow-lg">
-          <Flag className="w-7 h-7" />
+export function CheckpointModal({ state, onDismiss }: CheckpointModalProps) {
+  const checkpointDay = state.day - 1
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [])
+
+  const metrics: Array<{ label: string; value: number; unit: string; icon: LucideIcon; color: string }> = [
+    { label: 'Energy reserves', value: state.resources.energy, unit: 'kWh', icon: Zap, color: 'text-amber-400' },
+    { label: 'Water supply', value: state.resources.water, unit: 'L', icon: Droplets, color: 'text-blue-400' },
+    { label: 'Oxygen supply', value: state.resources.oxygen, unit: 'L', icon: Wind, color: 'text-sky-400' },
+    { label: 'Food rations', value: state.resources.food, unit: 'rations', icon: Utensils, color: 'text-emerald-400' },
+  ]
+
+  return createPortal(
+    <div className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto overscroll-contain bg-black/80 p-3 backdrop-blur-sm sm:p-6">
+      <section
+        aria-labelledby="checkpoint-title"
+        aria-modal="true"
+        className="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-md overflow-y-auto overscroll-contain rounded-3xl border-2 border-[var(--color-line)] bg-[var(--color-deck)] p-5 text-center text-[var(--color-regolith)] shadow-2xl sm:p-6"
+        role="dialog"
+      >
+        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--color-action)]/40 bg-[var(--color-action)]/20 text-[var(--color-action)] shadow-lg">
+          <Flag className="h-7 w-7" aria-hidden />
         </div>
 
-        <h2 className="text-2xl font-black text-white mb-1">
-          10-Day Mission Checkpoint!
+        <h2 id="checkpoint-title" className="text-2xl font-black text-white">
+          Mission checkpoint · Day {checkpointDay}
         </h2>
-        <p className="text-xs font-bold text-[var(--color-dust)] mb-5">
-          Great job commanding Outpost Zero through Day {state.day - 1}! Here is your current base telemetry summary.
+        <p className="mb-5 mt-2 text-sm font-bold text-[var(--color-dust)]">
+          Great work! Here’s how your moonbase is doing so far.
         </p>
 
-        {/* Resource Telemetry Summary Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-6 text-left">
-          <div className="p-3.5 bg-slate-900/80 rounded-2xl border border-slate-700/80">
-            <div className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <Zap className="w-3.5 h-3.5 text-amber-400" /> Energy Reserves
+        <div className="mb-6 grid grid-cols-1 gap-3 text-left sm:grid-cols-2">
+          {metrics.map(({ label, value, unit, icon: Icon, color }) => (
+            <div key={label} className="rounded-2xl border border-slate-700/80 bg-slate-900/80 p-3.5">
+              <div className="mb-1 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400">
+                <Icon className={`h-3.5 w-3.5 ${color}`} aria-hidden />
+                {label}
+              </div>
+              <div className="text-xl font-black text-white">
+                {value} <span className="text-xs font-semibold text-slate-400">{unit}</span>
+              </div>
             </div>
-            <div className="text-xl font-black text-white">{state.resources.energy} <span className="text-xs font-semibold text-slate-400">kWh</span></div>
-          </div>
-
-          <div className="p-3.5 bg-slate-900/80 rounded-2xl border border-slate-700/80">
-            <div className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <Droplets className="w-3.5 h-3.5 text-blue-400" /> Water Supply
-            </div>
-            <div className="text-xl font-black text-white">{state.resources.water} <span className="text-xs font-semibold text-slate-400">L</span></div>
-          </div>
-
-          <div className="p-3.5 bg-slate-900/80 rounded-2xl border border-slate-700/80">
-            <div className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <Wind className="w-3.5 h-3.5 text-sky-400" /> Oxygen Level
-            </div>
-            <div className="text-xl font-black text-white">{state.resources.oxygen} <span className="text-xs font-semibold text-slate-400">L</span></div>
-          </div>
-
-          <div className="p-3.5 bg-slate-900/80 rounded-2xl border border-slate-700/80">
-            <div className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <Utensils className="w-3.5 h-3.5 text-emerald-400" /> Food Rations
-            </div>
-            <div className="text-xl font-black text-white">{state.resources.food} <span className="text-xs font-semibold text-slate-400">Rations</span></div>
-          </div>
+          ))}
         </div>
 
-        {/* Action Button */}
         <button
+          type="button"
           onClick={onDismiss}
-          className="w-full py-3.5 bg-[var(--color-nominal)] text-white font-black rounded-xl btn-chunky text-base flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition shadow-lg"
+          className="btn-chunky flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-nominal)] py-3.5 text-base font-black text-white shadow-lg transition hover:brightness-110"
         >
-          <span>Resume 30-Day Mission</span>
-          <ArrowRight className="w-5 h-5" />
+          <span>Continue the mission</span>
+          <ArrowRight className="h-5 w-5" aria-hidden />
         </button>
-      </div>
-    </div>
-  );
-};
+      </section>
+    </div>,
+    document.body,
+  )
+}

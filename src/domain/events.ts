@@ -20,16 +20,16 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
       id: 'power-fault-day-4',
       day: 4,
       isScripted: true,
-      title: 'Panne du réseau électrique',
-      subtitle: 'Surchauffe des panneaux solaires',
-      description: 'La poussière lunaire a provoqué un défaut de connexion. La production des panneaux baisse jusqu’à la réparation.',
+      title: 'Power Grid Problem',
+      subtitle: 'Solar panel overheating',
+      description: 'Moon dust caused a connection problem. The panels will make less power until they are repaired.',
       affectedSystemId: 'solar',
       choices: [
         {
           id: 'repair-now',
-          label: 'Réparer immédiatement',
-          kidDescription: 'Utilise des pièces de rechange et de l’énergie pour réparer les panneaux.',
-          tradeoffExplanation: 'Coûte 10 unités d’énergie et rétablit la production solaire.',
+          label: 'Repair the panels now',
+          kidDescription: 'Use spare parts and energy to fix the panels.',
+          tradeoffExplanation: 'Costs 10 Energy and restores the panels to full power.',
           effect: (s) => ({
             ...s,
             systemModes: { ...s.systemModes, solar: 'normal' },
@@ -39,9 +39,9 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
         },
         {
           id: 'delay-repair',
-          label: 'Reporter la réparation',
-          kidDescription: 'Économise de l’énergie maintenant, mais laisse les panneaux endommagés.',
-          tradeoffExplanation: 'La production solaire reste réduite jusqu’à la réparation.',
+          label: 'Wait to repair',
+          kidDescription: 'Save energy now, but leave the panels damaged.',
+          tradeoffExplanation: 'The panels will keep making less power until they are repaired.',
           effect: (s) => ({
             ...s,
             systemModes: { ...s.systemModes, solar: 'damaged' },
@@ -58,9 +58,9 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
       id: `solar-storm-day-${day}`,
       day,
       isScripted: true,
-      title: 'Alerte solaire : particules énergétiques',
-      subtitle: 'Risque accru de radiations',
-      description: `Le scénario s’inspire d’une donnée NASA DONKI du ${timeStr}. L’équipage doit réagir à une alerte de radiation.`,
+      title: 'Solar Alert: Energetic Particles',
+      subtitle: 'Higher radiation risk',
+      description: `This simulation is inspired by a NASA DONKI record from ${timeStr}. The crew must respond to a radiation alert.`,
       affectedSystemId: 'habitat',
       nasaContext: sepRecord
         ? {
@@ -68,15 +68,15 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
             instruments: sepRecord.instruments,
             linkedFlares: sepRecord.linkedFlares,
             linkedCmes: sepRecord.linkedCmes,
-            disclaimer: 'Donnée NASA DONKI destinée au contexte éducatif ; elle ne constitue pas une alerte opérationnelle.',
+            disclaimer: 'NASA DONKI data is provided for learning and context. It is not an operational alert.',
           }
         : undefined,
       choices: [
         {
           id: 'bunker-shelter',
-          label: 'Mettre l’équipage à l’abri',
-          kidDescription: 'Déplace l’équipage dans la zone protégée de la base.',
-          tradeoffExplanation: 'Dans le jeu, l’équipage est protégé, mais les activités extérieures s’arrêtent.',
+          label: 'Move the crew to shelter',
+          kidDescription: 'Move the crew to the protected area inside the base.',
+          tradeoffExplanation: 'The crew is protected in the game, but outdoor work stops.',
           lessonId: 'radiation-shelter',
           effect: (s) => ({
             ...s,
@@ -86,9 +86,9 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
         },
         {
           id: 'boost-deflection',
-          label: 'Alimenter les protections',
-          kidDescription: 'Réserve de l’énergie pour les protections de l’habitat.',
-          tradeoffExplanation: 'Coûte 25 unités d’énergie dans cette simulation.',
+          label: 'Power the shields',
+          kidDescription: 'Save energy to power the habitat shields.',
+          tradeoffExplanation: 'Costs 25 Energy in this simulation.',
           lessonId: 'radiation-shelter',
           effect: (s) => ({
             ...s,

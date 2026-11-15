@@ -16,7 +16,6 @@ import {
   CheckCircle2,
   AlertOctagon,
   FlaskConical,
-  ArrowRight,
 } from 'lucide-react';
 import type { SystemId, SystemMode, MissionState, MissionConfig } from '../domain/types';
 import { canPerformAction, type PlayerAction } from '../domain/actions';
@@ -49,23 +48,39 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
     if (currentMode === 'damaged') {
       return (
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-black">
-          <AlertOctagon className="w-3.5 h-3.5" /> Endommagé
+          <AlertOctagon className="w-3.5 h-3.5" /> Damaged
         </span>
       );
     }
     return (
       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-black">
-        <CheckCircle2 className="w-3.5 h-3.5" /> Fonctionne normalement
+        <CheckCircle2 className="w-3.5 h-3.5" /> Operating normally
       </span>
     );
   };
 
   const getHeaderInfo = () => {
     if (system) {
+      const details: Record<SystemId, { name: string; role: string; explainer: string }> = {
+        solar: {
+          name: 'Solar Power Plant',
+          role: 'Base power system',
+          explainer: 'Generates electricity from lunar sunlight to power all base modules.',
+        },
+        habitat: {
+          name: 'Habitat Pod',
+          role: 'Crew air and water systems',
+          explainer: 'Controls environmental life support, scrubs CO2, and purifies drinking water.',
+        },
+        greenhouse: {
+          name: 'Hydroponic Greenhouse',
+          role: 'Fresh food production',
+          explainer: 'Grows fresh crops without soil to feed the astronaut crew.',
+        },
+      };
+
       return {
-        name: system.name,
-        explainer: system.explainer,
-        role: system.role,
+        ...details[system.id],
         icon:
           system.id === 'solar' ? (
             <Zap className="w-6 h-6 text-amber-400" />
@@ -80,30 +95,30 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
     switch (activeId) {
       case 'crew':
         return {
-          name: 'Équipage d’astronautes',
-          role: 'Équipage de la base lunaire',
-          explainer: 'L’équipage a besoin d’oxygène, d’eau et de nourriture chaque jour pour rester en bonne santé.',
+          name: 'Astronaut Crew',
+          role: 'Moonbase crew',
+          explainer: 'Monitors health, stamina, and daily consumption of 4 crew members.',
           icon: <Users className="w-6 h-6 text-[var(--color-action)]" />,
         };
       case 'rover':
         return {
-          name: 'Rover lunaire autonome',
-          role: 'Véhicule d’exploration de la surface',
-          explainer: 'Explore les cratères lunaires et collecte des échantillons pour la recherche.',
+          name: 'Lunar Rover',
+          role: 'Surface exploration vehicle',
+          explainer: 'Explores nearby craters to collect rock samples and science data.',
           icon: <Compass className="w-6 h-6 text-sky-400" />,
         };
       case 'comms':
         return {
-          name: 'Antenne de communication',
-          role: 'Lien de communication avec la Terre',
-          explainer: 'Transmet les données de la base et les rapports à l’équipe au sol.',
+          name: 'Radio Comms Array',
+          role: 'Link to mission control on Earth',
+          explainer: 'Transmits research telemetry to NASA Mission Control on Earth.',
           icon: <Radio className="w-6 h-6 text-orange-400" />,
         };
       default:
         return {
-          name: 'Habitat et support-vie',
-          role: 'Système de contrôle de l’habitat',
-          explainer: 'Recycle l’air et l’eau pour soutenir l’équipage.',
+          name: 'Habitat Pod',
+          role: 'Crew air and water systems',
+          explainer: 'Controls environmental life support, scrubs CO2, and purifies drinking water.',
           icon: <Home className="w-6 h-6 text-[var(--color-action)]" />,
         };
     }
@@ -111,29 +126,76 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
 
   const header = getHeaderInfo();
 
-  const renderRepairButton = () => {
-    if (!system || currentMode !== 'damaged') return null;
-    const action: PlayerAction = { type: 'REPAIR_SYSTEM', systemId: system.id };
+  const getDisabledTooltip = (action: PlayerAction) => {
     const check = canPerformAction(state, action);
+    if (check.allowed) return undefined;
+    return state.actionsLeft <= 0
+      ? 'No Commander Actions Remaining Today'
+      : 'Resource Requirements Not Met';
+  };
+
+  const renderCommanderAction = (
+    action: PlayerAction,
+    label: string,
+    description: string,
+    resourceCost: string,
+    Icon: typeof Zap,
+    buttonClass: string,
+  ) => {
+    const check = canPerformAction(state, action);
+    const tooltip = getDisabledTooltip(action);
+    const tooltipId = `action-tooltip-${action.type}`;
 
     return (
-      <button
-        onClick={() => onApplyAction(action)}
-        disabled={!check.allowed}
-        className={`w-full py-3.5 px-4 rounded-xl font-extrabold text-sm btn-chunky flex items-center justify-center gap-2 cursor-pointer transition ${
-          check.allowed
-            ? 'bg-[var(--color-action)] text-white hover:bg-[var(--color-action-hover)]'
-            : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
-        }`}
+      <div
+        className="group relative"
+        key={action.type}
+        tabIndex={tooltip ? 0 : undefined}
+        title={tooltip}
+        aria-describedby={tooltip ? tooltipId : undefined}
       >
-        <Wrench className="w-4 h-4" />
-        <span>Réparation d’urgence (−15 énergie)</span>
-        {!check.allowed && (
-          <span className="text-xs font-semibold text-red-400 flex items-center gap-1 ml-2">
-            <AlertTriangle className="w-3.5 h-3.5" /> {check.reason}
+        <button
+          onClick={() => onApplyAction(action)}
+          disabled={!check.allowed}
+          aria-describedby={tooltip ? tooltipId : undefined}
+          className={`w-full rounded-xl border px-4 py-3.5 text-left btn-chunky transition ${
+            check.allowed
+              ? buttonClass
+              : 'cursor-not-allowed border-slate-700 bg-slate-800 text-slate-500 opacity-60'
+          }`}
+        >
+          <span className="flex items-center gap-2 text-sm font-extrabold">
+            <Icon className="h-4 w-4 shrink-0" />
+            {label}
+          </span>
+          <span className="mt-1 block text-xs font-semibold leading-relaxed opacity-90">{description}</span>
+          <span className="mt-2 block text-[11px] font-bold">
+            Costs 1 Commander Action · {resourceCost}
+          </span>
+        </button>
+        {tooltip && (
+          <span
+            id={tooltipId}
+            role="tooltip"
+            className="invisible absolute bottom-full left-0 z-10 mb-2 w-64 rounded-lg border border-[var(--color-line)] bg-[var(--color-deck)] p-2 text-xs font-bold text-white opacity-0 shadow-xl group-hover:visible group-hover:opacity-100 group-focus-visible:visible group-focus-visible:opacity-100"
+          >
+            <AlertTriangle className="mr-1 inline h-3.5 w-3.5 text-amber-400" aria-hidden />
+            {tooltip}
           </span>
         )}
-      </button>
+      </div>
+    );
+  };
+
+  const renderRepairButton = () => {
+    if (!system || currentMode !== 'damaged') return null;
+    return renderCommanderAction(
+      { type: 'REPAIR_SYSTEM', systemId: system.id },
+      'Emergency System Repair',
+      'Fix this system and return it to normal operation.',
+      '15 Energy',
+      Wrench,
+      'bg-[var(--color-action)] text-white hover:bg-[var(--color-action-hover)] border-transparent',
     );
   };
 
@@ -163,10 +225,10 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-black uppercase tracking-wider text-[var(--color-dust)]">
-            Effets quotidiens
+            Daily Effects
           </span>
           <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-400/90 bg-amber-500/10 px-2.5 py-0.5 rounded-md border border-amber-500/20">
-            <FlaskConical className="w-3 h-3" /> Par jour
+            <FlaskConical className="w-3 h-3" /> Per day
           </span>
         </div>
 
@@ -174,7 +236,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
           <div className="grid grid-cols-2 gap-3 bg-slate-900/80 p-4 rounded-2xl border border-slate-700/70 font-bold text-sm">
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
               <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
-                <Zap className="w-4 h-4 text-amber-400" /> Énergie
+                <Zap className="w-4 h-4 text-amber-400" /> Energy
               </span>
               <span className={activeEffects.energy && activeEffects.energy > 0 ? 'text-emerald-400 font-black' : activeEffects.energy && activeEffects.energy < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
                 {formatResourceValue(activeEffects.energy)}
@@ -183,7 +245,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
 
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
               <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
-                <Wind className="w-4 h-4 text-sky-400" /> Oxygène
+                <Wind className="w-4 h-4 text-sky-400" /> Oxygen
               </span>
               <span className={activeEffects.oxygen && activeEffects.oxygen > 0 ? 'text-emerald-400 font-black' : activeEffects.oxygen && activeEffects.oxygen < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
                 {formatResourceValue(activeEffects.oxygen)}
@@ -192,7 +254,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
 
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
               <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
-                <Droplets className="w-4 h-4 text-blue-400" /> Eau
+                <Droplets className="w-4 h-4 text-blue-400" /> Water
               </span>
               <span className={activeEffects.water && activeEffects.water > 0 ? 'text-emerald-400 font-black' : activeEffects.water && activeEffects.water < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
                 {formatResourceValue(activeEffects.water)}
@@ -201,7 +263,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
 
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
               <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
-                <Utensils className="w-4 h-4 text-emerald-400" /> Nourriture
+                <Utensils className="w-4 h-4 text-emerald-400" /> Food
               </span>
               <span className={activeEffects.food && activeEffects.food > 0 ? 'text-emerald-400 font-black' : activeEffects.food && activeEffects.food < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
                 {formatResourceValue(activeEffects.food)}
@@ -211,62 +273,75 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
         ) : activeId === 'crew' ? (
           <div className="grid grid-cols-2 gap-3 bg-slate-900/80 p-4 rounded-2xl border border-slate-700/70 font-bold text-sm text-red-400">
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
-              <span className="text-slate-300 flex items-center gap-1.5"><Wind className="w-4 h-4" /> Oxygène:</span>
+              <span className="text-slate-300 flex items-center gap-1.5"><Wind className="w-4 h-4" /> Oxygen:</span>
               <span className="font-black">-8</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
-              <span className="text-slate-300 flex items-center gap-1.5"><Droplets className="w-4 h-4" /> Eau:</span>
+              <span className="text-slate-300 flex items-center gap-1.5"><Droplets className="w-4 h-4" /> Water:</span>
               <span className="font-black">-5</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
-              <span className="text-slate-300 flex items-center gap-1.5"><Utensils className="w-4 h-4" /> Nourriture:</span>
+              <span className="text-slate-300 flex items-center gap-1.5"><Utensils className="w-4 h-4" /> Food:</span>
               <span className="font-black">-8</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60 text-slate-400">
-              <span className="flex items-center gap-1.5"><Zap className="w-4 h-4" /> Énergie:</span>
+              <span className="flex items-center gap-1.5"><Zap className="w-4 h-4" /> Energy:</span>
               <span>0</span>
             </div>
           </div>
         ) : (
           <div className="p-4 bg-slate-900/80 rounded-2xl border border-slate-700/70 text-xs font-semibold text-slate-300">
-            Équipement de surface. Choisis une action ci-dessous pour envoyer une commande.
+            Surface equipment. Choose an action below to send a command.
           </div>
         )}
       </div>
 
-      {/* 3. Actions & Maintenance */}
       <div className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <span className="text-xs font-black uppercase tracking-wider text-[var(--color-dust)]">
+            Commander Actions
+          </span>
+          <span className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-bold text-emerald-400">
+            Daily Actions Left: {state.actionsLeft}
+          </span>
+        </div>
+
         {renderRepairButton()}
 
         {system?.id === 'solar' && currentMode !== 'damaged' && (
-          <button
-            onClick={() => onApplyAction({ type: 'CLEAN_SOLAR_PANELS' })}
-            className="w-full py-3.5 px-4 rounded-xl bg-slate-800 border border-slate-700 text-amber-300 font-extrabold text-xs btn-chunky flex items-center justify-center gap-2 hover:border-amber-400 transition cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4" /> Nettoyer les panneaux (−5 énergie)
-          </button>
+          renderCommanderAction(
+            { type: 'CLEAN_SOLAR_PANELS' },
+            'Wipe Solar Dust',
+            'Clean solar collectors to restore peak power generation.',
+            '5 Energy',
+            Sparkles,
+            'bg-slate-800 text-amber-300 border-slate-700 hover:border-amber-400',
+          )
         )}
 
         {activeId === 'rover' && (
-          <button
-            onClick={() => onApplyAction({ type: 'ROVER_COLLECT_SAMPLES' })}
-            className="w-full py-3.5 px-4 rounded-xl bg-[var(--color-action)] text-white font-extrabold text-sm btn-chunky flex items-center justify-center gap-2 hover:bg-[var(--color-action-hover)] transition cursor-pointer"
-          >
-            <Compass className="w-4 h-4" /> Analyser des échantillons (−20 énergie, +100 science)
-          </button>
+          renderCommanderAction(
+            { type: 'ROVER_COLLECT_SAMPLES' },
+            'Scan Craters with Rover',
+            'Explore lunar surface to gather science points.',
+            '20 Energy · +100 Science',
+            Compass,
+            'bg-[var(--color-action)] text-white border-transparent hover:bg-[var(--color-action-hover)]',
+          )
         )}
 
         {activeId === 'comms' && (
-          <button
-            onClick={() => onApplyAction({ type: 'COMMS_TRANSMIT_REPORT' })}
-            className="w-full py-3.5 px-4 rounded-xl bg-[var(--color-action)] text-white font-extrabold text-sm btn-chunky flex items-center justify-center gap-2 hover:bg-[var(--color-action-hover)] transition cursor-pointer"
-          >
-            <Radio className="w-4 h-4" /> Transmettre à la Terre (−15 énergie, +50 science)
-          </button>
+          renderCommanderAction(
+            { type: 'COMMS_TRANSMIT_REPORT' },
+            'Transmit Earth Telemetry',
+            'Send daily mission logs back to Earth for bonus science.',
+            '15 Energy · +50 Science',
+            Radio,
+            'bg-[var(--color-action)] text-white border-transparent hover:bg-[var(--color-action-hover)]',
+          )
         )}
       </div>
 
-      {/* 4. Learn Science Link */}
       {system?.lessonId && (
         <div className="pt-2 border-t border-[var(--color-line)]">
           <Link
@@ -274,7 +349,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
             className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-slate-800/80 border border-slate-700 text-white font-extrabold text-xs hover:border-[var(--color-action)] transition"
           >
             <BookOpen className="w-4 h-4 text-[var(--color-action)]" />
-            <span>Découvrir la science : {system.name}</span>
+            <span>Discover Space Science: {header.name}</span>
           </Link>
         </div>
       )}
@@ -284,10 +359,10 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
         <button
           onClick={onAdvanceDay}
           disabled={!!state.pendingEventId}
+          title={state.pendingEventId ? 'Resolve the current incident before advancing.' : undefined}
           className="w-full py-4 px-6 bg-[var(--color-action)] text-white font-black text-base rounded-2xl btn-chunky flex items-center justify-center gap-2 cursor-pointer hover:bg-[var(--color-action-hover)] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg transition"
         >
-          <span>Avancer d’un jour</span>
-          <ArrowRight className="w-5 h-5" />
+          <span>Advance Day →</span>
         </button>
       </div>
     </div>

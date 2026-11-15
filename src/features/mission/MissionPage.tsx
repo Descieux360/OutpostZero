@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Zap, Home, Sprout, Users, Compass, Radio, ArrowRight, RotateCcw } from 'lucide-react';
 import { useMission } from './MissionContext';
@@ -14,23 +14,15 @@ export const MissionPage: React.FC = () => {
   const { state, config, dispatch } = useMission();
   const navigate = useNavigate();
   const [selectedObjectId, setSelectedObjectId] = useState<string>('habitat');
-  const [showCheckpoint, setShowCheckpoint] = useState<boolean>(false);
   const [lastDismissedCheckpointDay, setLastDismissedCheckpointDay] = useState<number>(0);
 
   const activeIncident = state.pendingEventId ? getEventForDay(state.day, state) : null;
-
-  useEffect(() => {
-    if (
-      (state.day === 11 || state.day === 21) &&
-      lastDismissedCheckpointDay !== state.day
-    ) {
-      setShowCheckpoint(true);
-    }
-  }, [state.day, lastDismissedCheckpointDay]);
+  const showCheckpoint =
+    (state.day === 11 || state.day === 21) &&
+    lastDismissedCheckpointDay !== state.day;
 
   const handleDismissCheckpoint = () => {
     setLastDismissedCheckpointDay(state.day);
-    setShowCheckpoint(false);
   };
 
   if (state.missionStatus === 'completed') {
@@ -38,10 +30,10 @@ export const MissionPage: React.FC = () => {
       <main className="mx-auto max-w-3xl px-5 py-16">
         <section className="rounded-3xl border border-emerald-700 bg-slate-900 p-8 text-center">
           <div className="text-5xl">🌕</div>
-          <p className="mt-4 text-sm font-black uppercase tracking-widest text-emerald-300">Mission lunaire terminée</p>
-          <h1 className="mt-2 text-3xl font-black text-white">Bravo, équipage !</h1>
-          <p className="mt-4 text-slate-300">Tu as maintenu l’avant-poste pendant {config.totalDays} jours simulés. Passe maintenant le test lunaire pour débloquer Mars.</p>
-          <button onClick={() => navigate('/exam/moon')} className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-5 py-3 font-black text-slate-950">Passer le test lunaire <ArrowRight size={18} /></button>
+          <p className="mt-4 text-sm font-black uppercase tracking-widest text-emerald-300">Lunar Mission Completed</p>
+          <h1 className="mt-2 text-3xl font-black text-white">Great job, crew!</h1>
+          <p className="mt-4 text-slate-300">You successfully commanded the outpost for {config.totalDays} simulated days. Take the lunar exam to complete your mission badge.</p>
+          <button onClick={() => navigate('/exam/moon')} className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-5 py-3 font-black text-slate-950">Take Lunar Exam <ArrowRight size={18} /></button>
         </section>
       </main>
     );
@@ -52,10 +44,10 @@ export const MissionPage: React.FC = () => {
       <main className="mx-auto max-w-3xl px-5 py-16">
         <section className="rounded-3xl border border-rose-700 bg-slate-900 p-8 text-center">
           <div className="text-5xl">🛠️</div>
-          <p className="mt-4 text-sm font-black uppercase tracking-widest text-rose-300">Mission interrompue</p>
-          <h1 className="mt-2 text-3xl font-black text-white">Une ressource est épuisée</h1>
-          <p className="mt-4 text-slate-300">Examine les décisions du journal et recommence en équilibrant mieux les besoins de l’équipage.</p>
-          <button onClick={() => { dispatch({ type: 'RESTART' }); navigate('/briefing') }} className="mt-6 inline-flex items-center gap-2 rounded-xl bg-orange-500 px-5 py-3 font-black text-white"><RotateCcw size={18} /> Recommencer la mission</button>
+          <p className="mt-4 text-sm font-black uppercase tracking-widest text-rose-300">Mission Aborted</p>
+          <h1 className="mt-2 text-3xl font-black text-white">A Vital Resource Was Depleted</h1>
+          <p className="mt-4 text-slate-300">Review your past log decisions and try again by balancing your crew survival needs more carefully.</p>
+          <button onClick={() => { dispatch({ type: 'RESTART' }); navigate('/briefing') }} className="mt-6 inline-flex items-center gap-2 rounded-xl bg-orange-500 px-5 py-3 font-black text-white"><RotateCcw size={18} /> Restart Mission</button>
         </section>
       </main>
     );
@@ -68,7 +60,7 @@ export const MissionPage: React.FC = () => {
         <div>
           <h1 className="text-xl font-black text-white">{config.name}</h1>
           <div className="text-xs font-bold text-[var(--color-dust)]">
-            Graine : <span className="font-mono text-amber-400">{state.seed}</span> | Actions du jour : <span className="text-emerald-400">{state.actionsLeft}</span>
+            Seed: <span className="font-mono text-amber-400">{state.seed}</span> | Daily Actions Remaining: <span className="text-emerald-400">{state.actionsLeft}</span>
           </div>
         </div>
       </div>
@@ -105,7 +97,7 @@ export const MissionPage: React.FC = () => {
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500'
               }`}
             >
-              <Zap className="w-3.5 h-3.5 text-amber-400" /> Centrale solaire
+              <Zap className="w-3.5 h-3.5 text-amber-400" /> Solar Power Plant
             </button>
 
             <button
@@ -116,7 +108,7 @@ export const MissionPage: React.FC = () => {
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500'
               }`}
             >
-              <Home className="w-3.5 h-3.5 text-sky-400" /> Habitat
+              <Home className="w-3.5 h-3.5 text-sky-400" /> Habitat Pod
             </button>
 
             <button
@@ -127,7 +119,7 @@ export const MissionPage: React.FC = () => {
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500'
               }`}
             >
-              <Sprout className="w-3.5 h-3.5 text-emerald-400" /> Serre
+              <Sprout className="w-3.5 h-3.5 text-emerald-400" /> Greenhouse
             </button>
 
             <button
@@ -138,7 +130,7 @@ export const MissionPage: React.FC = () => {
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500'
               }`}
             >
-              <Users className="w-3.5 h-3.5 text-orange-400" /> Équipage
+              <Users className="w-3.5 h-3.5 text-orange-400" /> Crew
             </button>
 
             <button
@@ -160,7 +152,7 @@ export const MissionPage: React.FC = () => {
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500'
               }`}
             >
-              <Radio className="w-3.5 h-3.5 text-amber-300" /> Radio
+              <Radio className="w-3.5 h-3.5 text-amber-300" /> Comms
             </button>
           </div>
         </div>
@@ -186,7 +178,7 @@ export const MissionPage: React.FC = () => {
       )}
 
       {/* Checkpoint Modal */}
-      {showCheckpoint && (
+      {showCheckpoint && !activeIncident && (
         <CheckpointModal state={state} onDismiss={handleDismissCheckpoint} />
       )}
     </div>

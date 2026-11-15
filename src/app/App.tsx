@@ -6,11 +6,10 @@ import { WelcomeScreen } from '../features/mission/WelcomeScreen'
 import { AppLayout } from './AppLayout'
 import { LessonPage } from '../features/lessons/LessonPage'
 import { LessonsPage } from '../features/lessons/LessonsPage'
-import { AcademyProgressProvider, useAcademyProgress } from '../features/academy/AcademyProgressContext'
+import { AcademyProgressProvider } from '../features/academy/AcademyProgressContext'
 import { LevelSelectionScreen } from '../features/academy/LevelSelectionScreen'
 import { KnowledgeExamScreen, AcademyCompleteScreen } from '../features/academy/KnowledgeExamScreen'
 import { EarthTrainingScreen } from '../features/training/EarthTrainingScreen'
-import { MarsMissionScreen } from '../features/mars/MarsMissionScreen'
 
 function WelcomeRoute() {
   const navigate = useNavigate()
@@ -18,38 +17,47 @@ function WelcomeRoute() {
 }
 
 function EarthTrainingRoute() {
-  const { earthPassed } = useAcademyProgress()
-  if (earthPassed) return <Navigate to="/levels" replace />
   return <EarthTrainingScreen />
 }
 
 function BriefingRoute() {
-  const { earthPassed } = useAcademyProgress()
   const { dispatch } = useMission()
   const navigate = useNavigate()
-  if (!earthPassed) return <Navigate to="/levels" replace />
-  return <BriefingScreen onBegin={() => { dispatch({ type: 'RESTART' }); dispatch({ type: 'START' }); navigate('/mission') }} />
+
+  return (
+    <BriefingScreen
+      onBegin={() => {
+        dispatch({ type: 'RESTART' })
+        dispatch({ type: 'START' })
+        navigate('/mission')
+      }}
+    />
+  )
 }
 
 function MissionRoute() {
-  const { earthPassed } = useAcademyProgress()
   const { state } = useMission()
-  if (!earthPassed) return <Navigate to="/levels" replace />
-  if (state.missionStatus === 'briefing') return <Navigate to="/briefing" replace />
+
+  // Redirect to briefing if the mission has not been started yet
+  if (state.missionStatus !== 'active') {
+    return <Navigate to="/briefing" replace />
+  }
+
   return <MissionPage />
 }
 
 function CompleteRoute() {
-  const { marsPassed } = useAcademyProgress()
-  return marsPassed ? <AcademyCompleteScreen /> : <Navigate to="/levels" replace />
+  return <AcademyCompleteScreen />
 }
 
 function NotFound() {
   return (
-    <main className="mx-auto max-w-xl px-6 py-24">
-      <h1 className="text-3xl font-bold text-white">Page introuvable</h1>
-      <p className="mt-3">Cette adresse n’existe pas dans Space Academy.</p>
-      <Link to="/" className="mt-6 inline-block rounded-md bg-nominal px-5 py-3 font-semibold text-vacuum">Retour à l’accueil</Link>
+    <main className="mx-auto max-w-xl px-6 py-24 text-white">
+      <h1 className="text-3xl font-bold">Page not found</h1>
+      <p className="mt-3 text-slate-300">That address doesn’t exist in Space Academy.</p>
+      <Link to="/" className="mt-6 inline-block rounded-xl bg-cyan-500 px-5 py-3 font-black text-slate-950">
+        Back to start
+      </Link>
     </main>
   )
 }
@@ -67,7 +75,6 @@ export default function App() {
               <Route path="/exam/:levelId" element={<KnowledgeExamScreen />} />
               <Route path="/briefing" element={<BriefingRoute />} />
               <Route path="/mission" element={<MissionRoute />} />
-              <Route path="/mars" element={<MarsMissionScreen />} />
               <Route path="/complete" element={<CompleteRoute />} />
               <Route path="/learn" element={<LessonsPage />} />
               <Route path="/learn/:cardId" element={<LessonPage />} />
