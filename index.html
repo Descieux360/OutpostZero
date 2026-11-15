@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#061b49" />
+    <meta name="description" content="Space Academy : deviens un astronaute en jouant !" />
+    <title>Space Academy — Deviens un astronaute en jouant !</title>
+    <!-- Styles de secours CRITIQUES (non purgeable par Tailwind) -->
+    <style>
+      /* Priorité absolue : forcer l'affichage de l'application React */
+      #root, #__next, [data-root] {
+        display: block !important;
+        visibility: visible !important;
+      }
+      html, body {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        background: #061b49 !important;
+        color: #fff !important;
+      }
+      /* Ciblage direct du conteneur React */
+      .app-shell, .home-page, .mission-page, 
+      .earth-level-page, .future-level-page {
+        display: block !important !important;
+        visibility: visible !important !important;
+      }
+      /* Surcharger toutes les règles Tailwind potentiellement masquantes */
+      [class*="home-"], [class*="mission-"], 
+      [class*="earth-"], [class*="future-"] {
+        display: block !important;
+        visibility: visible !important;
+      }
+      /* Forcer la visibilité de tous les éléments */
+      * {
+        display: block !important;
+        visibility: visible !important;
+      }
+      /* Ciblage direct du contenu principal */
+      main, section, div {
+        display: block !important;
+        visibility: visible !important;
+      }
+    </style>
+    <script type="module" src="/src/main.tsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

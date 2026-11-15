@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === FORCAGE D'AFFICHAGE CRITIQUE (non purgeable) === */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #061b49;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* S'assurer que racine React est toujours visible */
+#root,
+.app-shell,
+.home-page,
+.mission-page,
+.earth-level-page,
+.future-level-page {
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* S'assurer que les enfants sont visibles */
+*,
+*::before,
+*::after {
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Empêcher Tailwind de masquer par défaut */
+.main,
+section,
+div[class*="earth-"],
+div[class*="future-"],
+div[class*="home-"],
+div[class*="mission-"] {
+  display: block !important;
+}

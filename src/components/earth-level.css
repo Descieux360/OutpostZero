@@ -1,0 +1,2291 @@
+.earth-level-page,
+.future-level-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #06143d;
+  color: #f7fbff;
+}
+
+.earth-level-page {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(12px, 2vh, 22px) clamp(14px, 2.8vw, 42px) max(14px, env(safe-area-inset-bottom));
+}
+
+.earth-level-scene {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  background: #06143d;
+}
+
+.earth-level-scene picture {
+  position: absolute;
+  inset: -1%;
+  display: block;
+}
+
+.earth-level-scene img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  animation: earth-scene-drift 32s ease-in-out infinite alternate;
+}
+
+.earth-level-scene-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(3, 15, 43, 0.85) 0%, rgba(3, 15, 43, 0.7) 48%, rgba(3, 15, 43, 0.12) 100%),
+    linear-gradient(180deg, rgba(2, 11, 35, 0.55) 0%, transparent 34%, rgba(3, 12, 34, 0.62) 100%);
+}
+
+.earth-level-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(100%, 1440px);
+  min-height: calc(100svh - 40px);
+  flex: 1;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.earth-game-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 2vw, 26px);
+  min-height: 52px;
+}
+
+.earth-exit-button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid rgba(155, 221, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(4, 23, 63, 0.82);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.87rem;
+  font-weight: 800;
+  backdrop-filter: blur(10px);
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.earth-exit-button:hover {
+  transform: translateY(-2px);
+  border-color: #b5edff;
+  background: rgba(9, 62, 129, 0.95);
+}
+
+.earth-exit-button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.earth-game-brand {
+  min-width: 0;
+  text-align: center;
+  text-shadow: 0 2px 9px rgba(0, 0, 0, 0.7);
+}
+
+.earth-game-brand > span {
+  display: block;
+  margin-bottom: 2px;
+  color: #a8e8ff;
+  font-size: 0.63rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+}
+
+.earth-game-brand h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.1rem, 2.4vw, 1.7rem);
+  font-weight: 950;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.earth-game-brand h1 strong {
+  color: #ffd462;
+}
+
+.earth-star-total {
+  display: inline-flex;
+  min-width: 82px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 217, 102, 0.75);
+  border-radius: 999px;
+  background: rgba(42, 31, 67, 0.85);
+  color: #ffe46c;
+  font-weight: 900;
+  box-shadow: 0 0 16px rgba(255, 205, 67, 0.22);
+}
+
+.earth-star-total svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+.earth-header-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.earth-sound-button {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(167, 234, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(4, 23, 63, 0.82);
+  color: #ffffff;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.earth-sound-button:hover {
+  border-color: #a6eaff;
+  background: rgba(10, 58, 131, 0.92);
+  transform: translateY(-1px);
+}
+
+.earth-sound-button[aria-pressed="false"] {
+  border-color: rgba(255, 168, 168, 0.65);
+  color: #ffb3b3;
+}
+
+.earth-sound-button[aria-pressed="true"] {
+  border-color: rgba(126, 239, 168, 0.62);
+  background: rgba(6, 66, 48, 0.85);
+  color: #a6f7c4;
+}
+
+.earth-sound-button[aria-pressed="true"]:hover {
+  border-color: #a6f7c4;
+  background: rgba(9, 96, 65, 0.94);
+}
+
+.earth-sound-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.earth-top-progress {
+  width: min(100%, 1040px);
+  margin: 10px auto 0;
+}
+
+.earth-top-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 5px;
+  color: #e3f3ff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.75);
+}
+
+.earth-top-progress-track,
+.earth-quiz-counter > div {
+  height: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(164, 221, 255, 0.52);
+  border-radius: 99px;
+  background: rgba(3, 16, 46, 0.9);
+}
+
+.earth-top-progress-track span,
+.earth-quiz-counter > div span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff9b37, #ffe36f);
+  box-shadow: 0 0 10px rgba(255, 211, 85, 0.7);
+  transition: width 220ms ease;
+}
+
+.earth-stepper {
+  display: grid;
+  width: min(100%, 1040px);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+  margin: 14px auto 10px;
+}
+
+.earth-step-button {
+  display: flex;
+  min-width: 0;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border: 1px solid var(--step-border, rgba(145, 194, 237, 0.3));
+  border-radius: 13px;
+  background: var(--step-bg, rgba(4, 20, 56, 0.75));
+  color: var(--step-text, #b6cbe3);
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.earth-step-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.earth-step-button:not(:disabled):hover {
+  border-color: var(--step-accent, rgba(146, 221, 255, 0.76));
+  background: var(--step-bg-hover, rgba(7, 50, 111, 0.86));
+  color: #ffffff;
+}
+
+.earth-step-button.is-current {
+  border-color: var(--step-accent, #8ee4ff);
+  background: var(--step-bg-current, linear-gradient(135deg, rgba(10, 103, 196, 0.96), rgba(6, 52, 116, 0.96)));
+  color: #ffffff;
+  box-shadow: 0 0 16px var(--step-glow, rgba(21, 157, 255, 0.3));
+}
+
+.earth-step-button.is-done:not(.is-current) {
+  border-color: var(--step-border-done, rgba(112, 224, 157, 0.55));
+  color: var(--step-text-done, #bcf6ce);
+}
+
+.earth-step-number {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.68rem;
+}
+
+.earth-level-main {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  padding: 4px 0 8px;
+}
+
+.earth-console {
+  display: flex;
+  width: min(100%, 1040px);
+  min-height: min(62vh, 650px);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(158, 213, 255, 0.42);
+  border-radius: 25px;
+  background: linear-gradient(145deg, rgba(5, 22, 60, 0.96), rgba(7, 29, 73, 0.91));
+  box-shadow: 0 22px 65px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 24px rgba(22, 139, 255, 0.15);
+  backdrop-filter: blur(15px);
+}
+
+.earth-console-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(17px, 2.4vw, 25px) clamp(18px, 3vw, 32px) 12px;
+}
+
+.earth-section-kicker {
+  margin: 0 0 7px;
+  color: #8fe4ff;
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.earth-console-header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.65rem, 3.4vw, 2.55rem);
+  font-weight: 950;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+.earth-console-header p:last-child {
+  max-width: 650px;
+  margin: 7px 0 0;
+  color: #c8d9ee;
+  font-size: 0.91rem;
+  line-height: 1.45;
+}
+
+.earth-console-location {
+  flex: 0 0 auto;
+  padding-top: 4px;
+  color: #bbd6f0;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.earth-console-body {
+  flex: 1;
+  padding: 12px clamp(18px, 3vw, 32px) 20px;
+  animation: earth-panel-in 260ms ease both;
+}
+
+.earth-console-footer {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px clamp(18px, 3vw, 32px);
+  border-top: 1px solid rgba(148, 201, 245, 0.16);
+  background: rgba(2, 12, 37, 0.52);
+}
+
+.earth-footer-hint {
+  color: #9fb7d5;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.earth-footer-hint.is-warning {
+  color: #ffd462;
+}
+
+.earth-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.earth-primary-button,
+.earth-secondary-button,
+.earth-quiet-button,
+.earth-launch-button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  cursor: pointer;
+  font-size: 0.87rem;
+  font-weight: 900;
+  transition: transform 150ms ease, background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.earth-primary-button {
+  border-color: #83dfff;
+  background: linear-gradient(180deg, #138df2, #0761c5);
+  color: #ffffff;
+  box-shadow: 0 7px 18px rgba(0, 97, 204, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.earth-primary-button:hover:not(:disabled),
+.earth-launch-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 115, 224, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.earth-primary-button:disabled {
+  border-color: rgba(170, 190, 217, 0.22);
+  background: #304564;
+  color: #aab8cb;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.earth-secondary-button {
+  border-color: rgba(126, 239, 168, 0.66);
+  background: linear-gradient(180deg, rgba(16, 122, 77, 0.92), rgba(8, 77, 50, 0.94));
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.earth-secondary-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: #a6f7c4;
+  background: linear-gradient(180deg, rgba(20, 148, 93, 0.96), rgba(10, 94, 61, 0.98));
+}
+
+.earth-secondary-button:disabled {
+  border-color: rgba(170, 190, 217, 0.24);
+  background: rgba(48, 69, 100, 0.78);
+  color: #aab8cb;
+  cursor: not-allowed;
+}
+
+.earth-quiet-button {
+  border-color: rgba(153, 192, 228, 0.35);
+  background: transparent;
+  color: #cbd9eb;
+}
+
+.earth-quiet-button:hover {
+  border-color: #a0e4ff;
+  color: #ffffff;
+}
+
+.earth-launch-button {
+  border-color: #ffe77f;
+  background: linear-gradient(180deg, #ffe35d, #ff9f28);
+  color: #3c2605;
+  font-size: 1rem;
+  box-shadow: 0 0 24px rgba(255, 194, 61, 0.43), 0 8px 20px rgba(0, 0, 0, 0.24);
+}
+
+.earth-launch-button span {
+  font-size: 1.2rem;
+}
+
+.earth-role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  width: min(100%, 900px);
+  margin: 6px auto 0;
+}
+
+.earth-role-card {
+  position: relative;
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 17px;
+  border: 1px solid var(--role-border, rgba(126, 184, 237, 0.36));
+  border-radius: 19px;
+  background: var(--role-bg, linear-gradient(145deg, rgba(10, 44, 93, 0.94), rgba(5, 24, 61, 0.94)));
+  color: #f6fbff;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.earth-role-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--role-accent, #8fe1ff);
+}
+
+.earth-role-card.is-selected {
+  border-color: var(--role-accent, #ffd96a);
+  background: var(--role-bg-selected, linear-gradient(145deg, rgba(10, 75, 137, 0.98), rgba(5, 34, 80, 0.98)));
+  box-shadow: 0 0 0 2px var(--role-ring, rgba(255, 217, 106, 0.22)), 0 0 24px var(--role-glow, rgba(27, 153, 255, 0.22));
+}
+
+.earth-role-icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid var(--role-icon-border, rgba(160, 224, 255, 0.3));
+  border-radius: 16px;
+  background: var(--role-icon-bg, rgba(9, 91, 165, 0.34));
+  font-size: 2rem;
+}
+
+.earth-role-copy {
+  display: grid;
+  gap: 5px;
+}
+
+.earth-role-copy strong {
+  font-size: 1.04rem;
+  font-weight: 900;
+}
+
+.earth-role-copy span {
+  color: #bcd0e8;
+  font-size: 0.79rem;
+  line-height: 1.4;
+}
+
+.earth-role-select {
+  margin-top: auto;
+  color: var(--role-accent, #91e5ff);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.earth-role-card.is-selected .earth-role-select {
+  color: var(--role-accent, #ffe36d);
+}
+
+.earth-hint {
+  margin: 12px 0 0;
+  color: #a9c2de;
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.earth-mission-step {
+  width: min(100%, 920px);
+  margin: 0 auto;
+}
+
+.earth-mission-route {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(5px, 1.4vw, 16px);
+  padding: 10px 0 17px;
+}
+
+.earth-route-stop {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  min-width: 0;
+  text-align: center;
+}
+
+.earth-route-stop > span {
+  display: grid;
+  width: clamp(70px, 9vw, 102px);
+  height: clamp(70px, 9vw, 102px);
+  place-items: center;
+  border: 2px solid rgba(169, 222, 255, 0.72);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 24%, rgba(25, 117, 214, 0.8), rgba(6, 36, 89, 0.92));
+  box-shadow: 0 0 20px rgba(21, 127, 236, 0.25), inset 0 0 18px rgba(255, 255, 255, 0.14);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+}
+
+.earth-route-stop strong {
+  color: #ffffff;
+  font-size: 1.05rem;
+}
+
+.earth-route-stop small {
+  color: #b9d0e7;
+  font-size: 0.7rem;
+  line-height: 1.25;
+}
+
+.earth-route-stop.is-near > span {
+  border-color: #d9e9ff;
+  background: radial-gradient(circle at 33% 25%, #eaf4ff, #8198b3 75%);
+}
+
+.earth-route-stop.is-far > span {
+  border-color: #ffad7e;
+  background: radial-gradient(circle at 32% 25%, #ffb16f, #bd392d 72%);
+}
+
+.earth-route-arrow {
+  color: #ffd460;
+  font-size: clamp(1.2rem, 2.7vw, 2rem);
+  filter: drop-shadow(0 0 8px rgba(255, 203, 72, 0.65));
+}
+
+.earth-objective-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.earth-objective {
+  display: grid;
+  gap: 5px;
+  padding: 12px 15px;
+  border-left: 3px solid #ffd05a;
+  border-radius: 0 12px 12px 0;
+  background: rgba(6, 42, 91, 0.65);
+}
+
+.earth-objective span {
+  color: #8edfff;
+  font-size: 0.61rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.earth-objective strong {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.earth-equipment-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+.earth-equipment-row span {
+  padding: 7px 10px;
+  border: 1px solid rgba(125, 186, 236, 0.3);
+  border-radius: 9px;
+  background: rgba(4, 18, 49, 0.55);
+  color: #c6dbf0;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.earth-training-step {
+  width: min(100%, 920px);
+  margin: 0 auto;
+}
+
+.earth-training-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.earth-training-tab {
+  display: flex;
+  min-height: 49px;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid var(--tab-border, rgba(127, 185, 236, 0.34));
+  border-radius: 12px;
+  background: var(--tab-bg, rgba(4, 20, 55, 0.64));
+  color: var(--tab-text, #c7d9ed);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 900;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.earth-training-tab > span:first-child {
+  font-size: 1.3rem;
+}
+
+.earth-training-tab:hover {
+  border-color: var(--tab-accent, #7fdcff);
+  color: #ffffff;
+}
+
+.earth-training-tab.is-active {
+  border-color: var(--tab-accent, #7fdcff);
+  background: var(--tab-active-bg, rgba(8, 72, 143, 0.86));
+  color: #ffffff;
+  box-shadow: 0 0 14px var(--tab-glow, rgba(21, 157, 255, 0.25));
+}
+
+.earth-training-tab.is-complete .earth-training-tab-status {
+  color: #87efaa;
+}
+
+.earth-training-tab-status {
+  margin-left: auto;
+  color: #738eae;
+  font-size: 1rem;
+}
+
+.earth-training-panel {
+  min-height: 270px;
+  padding: clamp(14px, 2.2vw, 23px);
+  border: 1px solid rgba(122, 184, 239, 0.27);
+  border-radius: 18px;
+  background: rgba(3, 17, 48, 0.6);
+}
+
+.earth-activity-copy {
+  width: min(100%, 750px);
+  margin: 0 auto;
+}
+
+.earth-activity-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 15px;
+}
+
+.earth-activity-heading > span {
+  display: grid;
+  width: 47px;
+  height: 47px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(131, 207, 255, 0.34);
+  border-radius: 14px;
+  background: rgba(11, 87, 160, 0.42);
+  font-size: 1.65rem;
+}
+
+.earth-activity-heading h3,
+.earth-lesson-detail h3,
+.earth-launch-copy h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.18rem;
+  font-weight: 900;
+}
+
+.earth-activity-heading p {
+  margin: 4px 0 0;
+  color: #bcd0e7;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.earth-rep-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 10px 0 8px;
+  color: #d3e4f7;
+}
+
+.earth-rep-counter strong {
+  color: #ffe06b;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.earth-rep-counter span {
+  color: #a9c0dc;
+  font-size: 0.8rem;
+}
+
+.earth-small-progress {
+  height: 10px;
+  margin: 0 0 15px;
+  overflow: hidden;
+  border: 1px solid rgba(136, 196, 243, 0.35);
+  border-radius: 99px;
+  background: rgba(2, 10, 32, 0.8);
+}
+
+.earth-small-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #20b4ff, #91f2c0);
+  transition: width 180ms ease;
+}
+
+.earth-rover-track {
+  position: relative;
+  display: flex;
+  width: min(100%, 440px);
+  align-items: center;
+  justify-content: space-between;
+  margin: 18px auto 13px;
+  padding: 0 4px;
+}
+
+.earth-rover-track::before {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  right: 20px;
+  left: 20px;
+  height: 4px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #4492cf, #ffce58);
+  content: "";
+  transform: translateY(-50%);
+}
+
+.earth-rover-track > span:not(.earth-rover-flag) {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 2px solid rgba(158, 214, 255, 0.72);
+  border-radius: 50%;
+  background: #092a5b;
+  color: #d8edff;
+  font-size: 1.08rem;
+  font-weight: 900;
+}
+
+.earth-rover-track > span.is-passed {
+  border-color: #9df4b1;
+  background: #165f54;
+  color: #d6ffdc;
+}
+
+.earth-rover-flag {
+  position: absolute;
+  top: -20px;
+  right: -2px;
+  color: #ffdc68;
+  font-size: 1.25rem;
+}
+
+.earth-rover-controls {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+  outline: none;
+}
+
+.earth-rover-controls button {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  border: 1px solid #70bfff;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #0d67b8, #07376f);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.earth-rover-controls button:disabled {
+  border-color: #73d99c;
+  background: #17694e;
+  cursor: default;
+}
+
+.earth-preflight-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin: 15px 0;
+}
+
+.earth-preflight-item {
+  display: flex;
+  min-height: 74px;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 11px;
+  border: 1px solid rgba(129, 190, 242, 0.28);
+  border-radius: 12px;
+  background: rgba(7, 39, 83, 0.74);
+  cursor: pointer;
+}
+
+.earth-preflight-item.is-checked {
+  border-color: rgba(130, 236, 165, 0.62);
+  background: rgba(14, 80, 77, 0.62);
+}
+
+.earth-preflight-item input {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  accent-color: #47d993;
+}
+
+.earth-preflight-item span {
+  display: grid;
+  gap: 3px;
+}
+
+.earth-preflight-item strong {
+  color: #ffffff;
+  font-size: 0.78rem;
+}
+
+.earth-preflight-item small {
+  color: #b5cbe2;
+  font-size: 0.67rem;
+  line-height: 1.35;
+}
+
+.earth-training-count {
+  margin: 10px 0 0;
+  color: #9fc0df;
+  font-size: 0.73rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.earth-academy-step {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.72fr) minmax(0, 1.28fr);
+  gap: 14px;
+  width: min(100%, 930px);
+  margin: 0 auto;
+}
+
+.earth-lesson-grid {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+
+.earth-lesson-button {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 18px;
+  min-height: 47px;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid var(--lesson-border, rgba(127, 185, 236, 0.31));
+  border-radius: 11px;
+  background: var(--lesson-bg, rgba(4, 21, 57, 0.72));
+  color: var(--lesson-text, #c8d9eb);
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: left;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.earth-lesson-button > span:first-child {
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.earth-lesson-button:hover {
+  border-color: var(--lesson-accent, #79d9ff);
+  color: #ffffff;
+}
+
+.earth-lesson-button.is-active {
+  border-color: var(--lesson-accent, #79d9ff);
+  background: var(--lesson-active-bg, rgba(7, 70, 132, 0.86));
+  color: #ffffff;
+  box-shadow: 0 0 14px var(--lesson-glow, rgba(21, 157, 255, 0.2));
+}
+
+.earth-lesson-button.is-read .earth-lesson-check {
+  color: #8af1a9;
+}
+
+.earth-lesson-check {
+  color: transparent;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.earth-lesson-detail {
+  display: flex;
+  min-height: 270px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 18px;
+  border: 1px solid rgba(122, 184, 239, 0.28);
+  border-radius: 16px;
+  background: rgba(3, 17, 48, 0.65);
+}
+
+.earth-lesson-summary {
+  margin: 0 0 5px;
+  color: #8fe4ff;
+  font-size: 0.73rem;
+  font-weight: 800;
+}
+
+.earth-lesson-detail > p:not(.earth-lesson-summary) {
+  margin: 8px 0 12px;
+  color: #c7d9ed;
+  font-size: 0.83rem;
+  line-height: 1.55;
+}
+
+.earth-science-fact {
+  display: grid;
+  gap: 4px;
+  margin: auto 0 12px;
+  padding: 10px 12px;
+  border-left: 3px solid #ffd35f;
+  border-radius: 0 10px 10px 0;
+  background: rgba(80, 64, 22, 0.3);
+}
+
+.earth-science-fact strong {
+  color: #ffe37d;
+  font-size: 0.69rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.earth-science-fact span {
+  color: #e3eaf4;
+  font-size: 0.77rem;
+  line-height: 1.4;
+}
+
+.earth-quiz-step {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.earth-quiz-counter {
+  display: grid;
+  grid-template-columns: auto minmax(70px, 1fr);
+  align-items: center;
+  gap: 13px;
+  color: #9fe5ff;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.earth-quiz-counter > div {
+  height: 6px;
+}
+
+.earth-question-title {
+  margin: 18px 0 13px;
+  color: #ffffff;
+  font-size: clamp(1.1rem, 2.5vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1.28;
+}
+
+.earth-answer-list {
+  display: grid;
+  gap: 8px;
+}
+
+.earth-answer {
+  display: grid;
+  grid-template-columns: 31px minmax(0, 1fr) 20px;
+  min-height: 47px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--answer-border, rgba(139, 190, 237, 0.36));
+  border-radius: 12px;
+  background: var(--answer-bg, rgba(6, 31, 73, 0.82));
+  color: #dbe9f8;
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 750;
+  text-align: left;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.earth-answer:not(:disabled):hover,
+.earth-answer.is-chosen {
+  border-color: var(--answer-accent, #78d9ff);
+  background: var(--answer-bg-active, rgba(7, 70, 134, 0.9));
+  color: #ffffff;
+}
+
+.earth-answer.is-correct {
+  border-color: #7ce6a3;
+  background: rgba(22, 100, 68, 0.75);
+  color: #e7ffed;
+}
+
+.earth-answer.is-wrong {
+  border-color: #ff9992;
+  background: rgba(127, 43, 52, 0.72);
+  color: #fff0ef;
+}
+
+.earth-answer-letter {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid var(--answer-letter-border, rgba(154, 203, 245, 0.4));
+  border-radius: 9px;
+  color: var(--answer-accent, #a7ddff);
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.earth-answer-mark {
+  color: #a7ffc0;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.earth-quiz-feedback {
+  min-height: 21px;
+  margin: 9px 0 0;
+  color: #a9c2de;
+  font-size: 0.78rem;
+}
+
+.earth-quiz-feedback.is-correct {
+  color: #a2f2b8;
+}
+
+.earth-quiz-feedback.is-wrong {
+  color: #ffb5ae;
+}
+
+.earth-quiz-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.earth-quiz-result {
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  padding: 30px 12px;
+  text-align: center;
+}
+
+.earth-quiz-result > span {
+  font-size: 3rem;
+}
+
+.earth-quiz-result h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.38rem;
+}
+
+.earth-quiz-result p {
+  margin: 0 0 8px;
+  color: #c4d7ed;
+  font-size: 0.88rem;
+}
+
+.earth-launch-step {
+  display: grid;
+  grid-template-columns: minmax(155px, 0.55fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+  width: min(100%, 780px);
+  min-height: 260px;
+  margin: 0 auto;
+}
+
+.earth-launch-visual {
+  display: grid;
+  min-height: 180px;
+  place-items: center;
+  border: 1px solid rgba(141, 212, 255, 0.25);
+  border-radius: 20px;
+  background: radial-gradient(circle, rgba(20, 102, 176, 0.44), rgba(4, 23, 64, 0.38) 65%, transparent 66%);
+}
+
+.earth-launch-visual span {
+  display: inline-block;
+  font-size: 5rem;
+  filter: drop-shadow(0 0 20px rgba(255, 199, 75, 0.45));
+  transform: rotate(-25deg);
+  animation: earth-rocket-ready 2.4s ease-in-out infinite alternate;
+}
+
+.earth-launch-copy h3 {
+  font-size: 1.55rem;
+}
+
+.earth-launch-copy > p:not(.earth-section-kicker) {
+  color: #c4d7eb;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.earth-launch-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.earth-launch-checks span {
+  padding: 6px 9px;
+  border: 1px solid rgba(111, 225, 159, 0.36);
+  border-radius: 8px;
+  background: rgba(20, 93, 66, 0.42);
+  color: #b5f6ca;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.earth-completion-panel {
+  display: grid;
+  width: min(100%, 720px);
+  justify-items: center;
+  margin: auto;
+  padding: clamp(25px, 5vw, 52px);
+  border: 1px solid rgba(255, 225, 123, 0.55);
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(5, 35, 81, 0.95), rgba(6, 18, 53, 0.96));
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.42), 0 0 35px rgba(25, 151, 255, 0.25);
+  animation: earth-panel-in 360ms ease both;
+}
+
+.earth-completion-rocket {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 3.7rem;
+  filter: drop-shadow(0 0 17px rgba(255, 204, 71, 0.62));
+  animation: earth-rocket-ready 1.7s ease-in-out infinite alternate;
+}
+
+.earth-completion-panel h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 950;
+}
+
+.earth-completion-panel > p:not(.earth-section-kicker) {
+  max-width: 490px;
+  color: #d1e0f2;
+  line-height: 1.55;
+}
+
+.earth-completion-stars {
+  display: flex;
+  gap: 8px;
+  margin: 5px 0 9px;
+}
+
+.earth-completion-stars svg {
+  width: 35px;
+  height: 35px;
+  fill: transparent;
+  stroke: #ffd35f;
+  stroke-width: 1.7;
+}
+
+.earth-completion-stars svg.is-earned {
+  fill: #ffd35f;
+  filter: drop-shadow(0 0 10px rgba(255, 211, 95, 0.72));
+}
+
+.earth-completion-panel .earth-unlock-note {
+  margin: 0 0 18px;
+  color: #a5f1bd;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.future-level-page {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(14px, 3vw, 36px);
+}
+
+.future-level-back {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 8px 14px;
+  border: 1px solid rgba(144, 213, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(4, 20, 57, 0.86);
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.future-level-back svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.future-level-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(100%, 560px);
+  justify-items: center;
+  gap: 12px;
+  margin: auto;
+  padding: 35px;
+  border: 1px solid rgba(133, 204, 255, 0.43);
+  border-radius: 28px;
+  background: rgba(4, 18, 53, 0.88);
+  text-align: center;
+  backdrop-filter: blur(14px);
+}
+
+.future-level-content h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 6vw, 3.1rem);
+}
+
+/* ---- Lecture automatique (synthèse vocale) ---- */
+
+.earth-narration-button[aria-pressed="true"] {
+  border-color: rgba(255, 212, 98, 0.85);
+  color: #ffe06a;
+  box-shadow: 0 0 14px rgba(255, 205, 67, 0.3);
+}
+
+.earth-narration-button.is-speaking {
+  animation: earth-narration-pulse 1.2s ease-in-out infinite;
+}
+
+.earth-sound-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@keyframes earth-narration-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 212, 98, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(255, 212, 98, 0);
+  }
+}
+
+.earth-console-tools {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.earth-listen-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid rgba(143, 228, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(9, 47, 102, 0.8);
+  color: #d6f2ff;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.earth-listen-button:hover:not(:disabled) {
+  border-color: #a6eaff;
+  background: rgba(13, 83, 163, 0.95);
+  transform: translateY(-1px);
+}
+
+.earth-listen-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.earth-listen-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+/* ---- Écran narratif des niveaux 2 et 3 ---- */
+
+.future-level-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.future-level-content {
+  width: min(100%, 900px);
+  justify-items: stretch;
+  gap: 14px;
+  margin: clamp(18px, 4vh, 42px) auto 0;
+  padding: clamp(20px, 3vw, 38px);
+  text-align: left;
+}
+
+.future-level-intro {
+  margin: 0;
+  color: #d6e6f6;
+  font-size: clamp(1rem, 1.6vw, 1.12rem);
+  line-height: 1.6;
+}
+
+.future-level-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.future-level-actions .earth-primary-button,
+.future-level-actions .earth-quiet-button {
+  font-size: 0.82rem;
+}
+
+.future-scenes {
+  display: grid;
+  gap: 12px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.future-scene {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid rgba(133, 204, 255, 0.25);
+  border-radius: 18px;
+  background: rgba(6, 26, 64, 0.72);
+}
+
+.future-scene-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.future-scene-index {
+  color: #8fe4ff;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.future-scene h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.future-scene p {
+  margin: 0;
+  color: #c6d9ed;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.future-scene-listen {
+  display: inline-flex;
+  min-height: 36px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid rgba(143, 228, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(9, 47, 102, 0.7);
+  color: #d6f2ff;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 900;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.future-scene-listen:hover:not(:disabled) {
+  border-color: #a6eaff;
+  background: rgba(13, 83, 163, 0.95);
+}
+
+.future-scene-listen:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.future-scene-listen svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.future-level-note {
+  margin: 6px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(148, 201, 245, 0.18);
+  color: #9fb6cf;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .earth-level-page {
+    overflow-y: auto;
+    padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .earth-level-scene-shade {
+    background: linear-gradient(180deg, rgba(3, 13, 39, 0.55) 0%, rgba(3, 13, 39, 0.42) 56%, rgba(3, 13, 39, 0.82) 100%);
+  }
+
+  .earth-level-shell {
+    min-height: calc(100svh - 22px);
+  }
+
+  .earth-game-header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 7px;
+    min-height: 45px;
+  }
+
+  .earth-exit-button {
+    width: 40px;
+    min-height: 40px;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .earth-exit-button span {
+    display: none;
+  }
+
+  .earth-game-brand > span {
+    font-size: 0.49rem;
+    letter-spacing: 0.1em;
+  }
+
+  .earth-game-brand h1 {
+    font-size: clamp(0.95rem, 4vw, 1.2rem);
+  }
+
+  .earth-star-total {
+    min-width: 63px;
+    min-height: 35px;
+    gap: 4px;
+    padding: 5px 8px;
+    font-size: 0.78rem;
+  }
+
+  .earth-star-total svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .earth-header-tools {
+    gap: 5px;
+  }
+
+  .earth-sound-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .earth-sound-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .earth-top-progress {
+    margin-top: 8px;
+  }
+
+  .earth-top-progress-labels {
+    font-size: 0.62rem;
+  }
+
+  .earth-stepper {
+    display: flex;
+    gap: 6px;
+    margin: 11px 0 9px;
+    overflow-x: auto;
+    padding: 1px 1px 5px;
+    scrollbar-width: thin;
+  }
+
+  .earth-step-button {
+    min-width: 93px;
+    min-height: 40px;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    padding: 6px 8px;
+    font-size: 0.68rem;
+  }
+
+  .earth-step-number {
+    width: 22px;
+    height: 22px;
+  }
+
+  .earth-level-main {
+    display: block;
+    padding: 0 0 4px;
+  }
+
+  .earth-console {
+    width: 100%;
+    min-height: 0;
+    border-radius: 19px;
+  }
+
+  .earth-console-header {
+    gap: 8px;
+    padding: 15px 15px 8px;
+  }
+
+  .earth-console-header h2 {
+    font-size: clamp(1.35rem, 6vw, 1.85rem);
+  }
+
+  .earth-console-header p:last-child {
+    margin-top: 5px;
+    font-size: 0.76rem;
+  }
+
+  .earth-console-location {
+    display: none;
+  }
+
+  .earth-console-body {
+    padding: 10px 13px 15px;
+  }
+
+  .earth-console-footer {
+    min-height: 60px;
+    padding: 9px 13px;
+  }
+
+  .earth-footer-hint {
+    max-width: 145px;
+    font-size: 0.65rem;
+  }
+
+  .earth-primary-button,
+  .earth-secondary-button,
+  .earth-quiet-button,
+  .earth-launch-button {
+    min-height: 39px;
+    padding: 9px 12px;
+    font-size: 0.78rem;
+  }
+
+  .earth-role-grid {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    margin-top: 3px;
+  }
+
+  .earth-role-card {
+    min-height: 78px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .earth-role-icon {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    border-radius: 12px;
+    font-size: 1.6rem;
+  }
+
+  .earth-role-copy {
+    min-width: 0;
+    flex: 1;
+    gap: 2px;
+  }
+
+  .earth-role-copy strong {
+    font-size: 0.9rem;
+  }
+
+  .earth-role-copy span {
+    font-size: 0.7rem;
+  }
+
+  .earth-role-select {
+    flex: 0 0 auto;
+    font-size: 0.57rem;
+  }
+
+  .earth-hint {
+    margin-top: 8px;
+    font-size: 0.72rem;
+  }
+
+  .earth-mission-route {
+    gap: 3px;
+    padding: 4px 0 13px;
+  }
+
+  .earth-route-stop {
+    gap: 2px;
+  }
+
+  .earth-route-stop > span {
+    width: clamp(54px, 17vw, 70px);
+    height: clamp(54px, 17vw, 70px);
+    font-size: 2rem;
+  }
+
+  .earth-route-stop strong {
+    font-size: 0.78rem;
+  }
+
+  .earth-route-stop small {
+    max-width: 85px;
+    font-size: 0.58rem;
+  }
+
+  .earth-route-arrow {
+    font-size: 1rem;
+  }
+
+  .earth-objective-row {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .earth-objective {
+    padding: 9px 11px;
+  }
+
+  .earth-objective strong {
+    font-size: 0.8rem;
+  }
+
+  .earth-equipment-row {
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .earth-equipment-row span {
+    padding: 6px 8px;
+    font-size: 0.66rem;
+  }
+
+  .earth-training-tabs {
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+
+  .earth-training-tab {
+    min-height: 43px;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 5px;
+    font-size: 0.68rem;
+  }
+
+  .earth-training-tab > span:first-child {
+    font-size: 1.05rem;
+  }
+
+  .earth-training-tab-status {
+    margin-left: 0;
+  }
+
+  .earth-training-panel {
+    min-height: 0;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .earth-activity-heading {
+    gap: 9px;
+    margin-bottom: 11px;
+  }
+
+  .earth-activity-heading > span {
+    width: 39px;
+    height: 39px;
+    border-radius: 11px;
+    font-size: 1.35rem;
+  }
+
+  .earth-activity-heading h3 {
+    font-size: 0.95rem;
+  }
+
+  .earth-activity-heading p {
+    font-size: 0.7rem;
+  }
+
+  .earth-preflight-list {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin: 10px 0;
+  }
+
+  .earth-preflight-item {
+    min-height: 55px;
+    padding: 8px;
+  }
+
+  .earth-preflight-item small {
+    font-size: 0.62rem;
+  }
+
+  .earth-training-count {
+    font-size: 0.65rem;
+  }
+
+  .earth-academy-step {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .earth-lesson-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .earth-lesson-button {
+    grid-template-columns: 24px minmax(0, 1fr) 14px;
+    min-height: 43px;
+    gap: 4px;
+    padding: 6px;
+    font-size: 0.64rem;
+  }
+
+  .earth-lesson-button > span:first-child {
+    font-size: 1rem;
+  }
+
+  .earth-lesson-detail {
+    min-height: 0;
+    padding: 12px;
+    border-radius: 13px;
+  }
+
+  .earth-lesson-detail h3 {
+    font-size: 1rem;
+  }
+
+  .earth-lesson-detail > p:not(.earth-lesson-summary) {
+    margin: 7px 0 9px;
+    font-size: 0.74rem;
+  }
+
+  .earth-science-fact {
+    margin-bottom: 9px;
+    padding: 8px 9px;
+  }
+
+  .earth-science-fact span {
+    font-size: 0.7rem;
+  }
+
+  .earth-quiz-counter {
+    gap: 8px;
+    font-size: 0.6rem;
+  }
+
+  .earth-question-title {
+    margin: 12px 0 9px;
+    font-size: 1rem;
+  }
+
+  .earth-answer {
+    grid-template-columns: 27px minmax(0, 1fr) 17px;
+    min-height: 43px;
+    gap: 7px;
+    padding: 7px 9px;
+    font-size: 0.74rem;
+  }
+
+  .earth-answer-letter {
+    width: 24px;
+    height: 24px;
+  }
+
+  .earth-quiz-feedback {
+    font-size: 0.69rem;
+  }
+
+  .earth-launch-step {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    min-height: 0;
+  }
+
+  .earth-launch-visual {
+    min-height: 95px;
+  }
+
+  .earth-launch-visual span {
+    font-size: 3.5rem;
+  }
+
+  .earth-launch-copy h3 {
+    font-size: 1.2rem;
+  }
+
+  .earth-launch-copy > p:not(.earth-section-kicker) {
+    margin: 6px 0;
+    font-size: 0.75rem;
+  }
+
+  .earth-launch-checks {
+    gap: 5px;
+    margin-top: 7px;
+  }
+
+  .earth-launch-checks span {
+    padding: 5px 7px;
+    font-size: 0.62rem;
+  }
+
+  .earth-completion-panel {
+    padding: 25px 16px;
+    border-radius: 20px;
+  }
+
+  .earth-completion-rocket {
+    font-size: 2.8rem;
+  }
+
+  .earth-completion-panel h2 {
+    font-size: 2rem;
+  }
+
+  .earth-completion-panel > p:not(.earth-section-kicker) {
+    font-size: 0.82rem;
+  }
+
+  .future-level-content {
+    padding: 25px 18px;
+    border-radius: 20px;
+  }
+
+  .future-level-header {
+    gap: 8px;
+  }
+
+  .future-level-content {
+    margin-top: 14px;
+  }
+
+  .future-level-actions {
+    width: 100%;
+  }
+
+  .future-level-actions .earth-primary-button,
+  .future-level-actions .earth-quiet-button {
+    flex: 1 1 100%;
+  }
+
+  .future-scene {
+    flex-direction: column;
+    gap: 10px;
+    padding: 13px 14px;
+  }
+
+  .future-scene-listen {
+    align-self: flex-start;
+  }
+
+  .earth-console-tools {
+    gap: 5px;
+  }
+}
+
+@media (max-width: 380px) {
+  .earth-game-brand > span {
+    letter-spacing: 0.04em;
+  }
+
+  .earth-step-button {
+    min-width: 83px;
+  }
+
+  .earth-role-copy span {
+    font-size: 0.66rem;
+  }
+
+  .earth-mission-route {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .earth-route-stop small {
+    max-width: 70px;
+  }
+
+  .earth-equipment-row span {
+    font-size: 0.6rem;
+  }
+}
+
+@keyframes earth-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes earth-scene-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes earth-rocket-ready {
+  from {
+    transform: translateY(2px) rotate(-25deg);
+  }
+  to {
+    transform: translateY(-7px) rotate(-25deg);
+  }
+}
+/* --------------------------------------------------------------------------
+   Couleurs distinctes pour chaque bouton du niveau Terre
+   -------------------------------------------------------------------------- */
+
+/* Étapes : cyan, bleu, vert, violet, orange, or */
+.earth-step-button:nth-child(1) {
+  --step-border: rgba(111, 232, 255, 0.36);
+  --step-bg: rgba(6, 45, 64, 0.78);
+  --step-text: #c4efff;
+  --step-accent: #6fe8ff;
+  --step-bg-hover: rgba(8, 85, 110, 0.9);
+  --step-bg-current: linear-gradient(135deg, rgba(9, 120, 150, 0.96), rgba(5, 62, 90, 0.96));
+  --step-glow: rgba(70, 220, 255, 0.32);
+  --step-border-done: rgba(111, 232, 255, 0.52);
+  --step-text-done: #cdf7ff;
+}
+
+.earth-step-button:nth-child(2) {
+  --step-border: rgba(124, 196, 255, 0.36);
+  --step-bg: rgba(6, 32, 68, 0.78);
+  --step-text: #c6dfff;
+  --step-accent: #7cc4ff;
+  --step-bg-hover: rgba(9, 60, 120, 0.9);
+  --step-bg-current: linear-gradient(135deg, rgba(14, 95, 190, 0.96), rgba(6, 52, 116, 0.96));
+  --step-glow: rgba(50, 150, 255, 0.34);
+  --step-border-done: rgba(124, 196, 255, 0.52);
+  --step-text-done: #cde5ff;
+}
+
+.earth-step-button:nth-child(3) {
+  --step-border: rgba(141, 240, 176, 0.36);
+  --step-bg: rgba(5, 45, 32, 0.78);
+  --step-text: #ccf6da;
+  --step-accent: #8df0b0;
+  --step-bg-hover: rgba(8, 82, 56, 0.9);
+  --step-bg-current: linear-gradient(135deg, rgba(12, 130, 80, 0.96), rgba(6, 74, 48, 0.96));
+  --step-glow: rgba(70, 220, 140, 0.32);
+  --step-border-done: rgba(141, 240, 176, 0.52);
+  --step-text-done: #d3f9e0;
+}
+
+.earth-step-button:nth-child(4) {
+  --step-border: rgba(213, 168, 255, 0.36);
+  --step-bg: rgba(33, 20, 58, 0.78);
+  --step-text: #e4d1ff;
+  --step-accent: #d5a8ff;
+  --step-bg-hover: rgba(62, 36, 100, 0.9);
+  --step-bg-current: linear-gradient(135deg, rgba(98, 58, 158, 0.96), rgba(56, 30, 98, 0.96));
+  --step-glow: rgba(180, 120, 255, 0.32);
+  --step-border-done: rgba(213, 168, 255, 0.52);
+  --step-text-done: #edd9ff;
+}
+
+.earth-step-button:nth-child(5) {
+  --step-border: rgba(255, 192, 122, 0.38);
+  --step-bg: rgba(56, 32, 10, 0.78);
+  --step-text: #ffe2c0;
+  --step-accent: #ffc07a;
+  --step-bg-hover: rgba(96, 55, 16, 0.9);
+  --step-bg-current: linear-gradient(135deg, rgba(170, 92, 18, 0.96), rgba(100, 52, 10, 0.96));
+  --step-glow: rgba(255, 170, 70, 0.32);
+  --step-border-done: rgba(255, 192, 122, 0.52);
+  --step-text-done: #ffe9ce;
+}
+
+.earth-step-button:nth-child(6) {
+  --step-border: rgba(255, 227, 122, 0.38);
+  --step-bg: rgba(56, 46, 8, 0.78);
+  --step-text: #fff3bd;
+  --step-accent: #ffe37a;
+  --step-bg-hover: rgba(96, 78, 12, 0.9);
+  --step-bg-current: linear-gradient(135deg, rgba(160, 128, 16, 0.96), rgba(96, 74, 8, 0.96));
+  --step-glow: rgba(255, 220, 80, 0.32);
+  --step-border-done: rgba(255, 227, 122, 0.52);
+  --step-text-done: #fff6cc;
+}
+
+/* Rôles : explorateur cyan, pilote orange, ingénieur vert */
+.earth-role-card:nth-child(1) {
+  --role-border: rgba(111, 232, 255, 0.48);
+  --role-bg: linear-gradient(145deg, rgba(8, 70, 90, 0.95), rgba(4, 32, 48, 0.95));
+  --role-accent: #6fe8ff;
+  --role-bg-selected: linear-gradient(145deg, rgba(10, 104, 130, 0.98), rgba(5, 48, 68, 0.98));
+  --role-ring: rgba(111, 232, 255, 0.3);
+  --role-glow: rgba(64, 210, 240, 0.34);
+  --role-icon-border: rgba(111, 232, 255, 0.42);
+  --role-icon-bg: rgba(24, 150, 180, 0.28);
+}
+
+.earth-role-card:nth-child(2) {
+  --role-border: rgba(255, 192, 122, 0.52);
+  --role-bg: linear-gradient(145deg, rgba(78, 44, 12, 0.95), rgba(44, 24, 6, 0.95));
+  --role-accent: #ffc07a;
+  --role-bg-selected: linear-gradient(145deg, rgba(132, 72, 16, 0.98), rgba(66, 35, 8, 0.98));
+  --role-ring: rgba(255, 192, 122, 0.32);
+  --role-glow: rgba(255, 168, 68, 0.34);
+  --role-icon-border: rgba(255, 192, 122, 0.44);
+  --role-icon-bg: rgba(190, 110, 25, 0.3);
+}
+
+.earth-role-card:nth-child(3) {
+  --role-border: rgba(141, 240, 176, 0.5);
+  --role-bg: linear-gradient(145deg, rgba(8, 72, 50, 0.95), rgba(4, 38, 28, 0.95));
+  --role-accent: #8df0b0;
+  --role-bg-selected: linear-gradient(145deg, rgba(12, 112, 74, 0.98), rgba(6, 58, 40, 0.98));
+  --role-ring: rgba(141, 240, 176, 0.3);
+  --role-glow: rgba(70, 220, 140, 0.32);
+  --role-icon-border: rgba(141, 240, 176, 0.42);
+  --role-icon-bg: rgba(35, 160, 95, 0.28);
+}
+
+/* Activités : sport orange, rover vert, navette cyan */
+.earth-training-tab:nth-child(1) {
+  --tab-border: rgba(255, 192, 122, 0.42);
+  --tab-bg: rgba(54, 31, 9, 0.72);
+  --tab-text: #ffe4c6;
+  --tab-accent: #ffc07a;
+  --tab-active-bg: linear-gradient(135deg, rgba(150, 84, 18, 0.94), rgba(88, 46, 9, 0.96));
+  --tab-glow: rgba(255, 170, 70, 0.3);
+}
+
+.earth-training-tab:nth-child(2) {
+  --tab-border: rgba(141, 240, 176, 0.42);
+  --tab-bg: rgba(5, 45, 32, 0.72);
+  --tab-text: #cff8de;
+  --tab-accent: #8df0b0;
+  --tab-active-bg: linear-gradient(135deg, rgba(12, 120, 76, 0.94), rgba(6, 66, 44, 0.96));
+  --tab-glow: rgba(70, 220, 140, 0.3);
+}
+
+.earth-training-tab:nth-child(3) {
+  --tab-border: rgba(111, 232, 255, 0.42);
+  --tab-bg: rgba(6, 45, 64, 0.72);
+  --tab-text: #c6f1ff;
+  --tab-accent: #6fe8ff;
+  --tab-active-bg: linear-gradient(135deg, rgba(9, 112, 142, 0.94), rgba(5, 60, 84, 0.96));
+  --tab-glow: rgba(70, 220, 255, 0.3);
+}
+
+/* Leçons : cyan, or, vert, violet, rose */
+.earth-lesson-button:nth-child(1) {
+  --lesson-border: rgba(111, 232, 255, 0.4);
+  --lesson-bg: rgba(6, 45, 64, 0.76);
+  --lesson-text: #c9f2ff;
+  --lesson-accent: #6fe8ff;
+  --lesson-active-bg: linear-gradient(135deg, rgba(9, 104, 132, 0.9), rgba(5, 58, 82, 0.94));
+  --lesson-glow: rgba(70, 220, 255, 0.26);
+}
+
+.earth-lesson-button:nth-child(2) {
+  --lesson-border: rgba(255, 227, 122, 0.42);
+  --lesson-bg: rgba(54, 44, 7, 0.76);
+  --lesson-text: #fff2bc;
+  --lesson-accent: #ffe37a;
+  --lesson-active-bg: linear-gradient(135deg, rgba(132, 106, 12, 0.9), rgba(74, 58, 7, 0.94));
+  --lesson-glow: rgba(255, 220, 80, 0.26);
+}
+
+.earth-lesson-button:nth-child(3) {
+  --lesson-border: rgba(141, 240, 176, 0.4);
+  --lesson-bg: rgba(5, 45, 32, 0.76);
+  --lesson-text: #d0f8df;
+  --lesson-accent: #8df0b0;
+  --lesson-active-bg: linear-gradient(135deg, rgba(11, 112, 72, 0.9), rgba(6, 62, 42, 0.94));
+  --lesson-glow: rgba(70, 220, 140, 0.26);
+}
+
+.earth-lesson-button:nth-child(4) {
+  --lesson-border: rgba(213, 168, 255, 0.42);
+  --lesson-bg: rgba(33, 20, 58, 0.76);
+  --lesson-text: #e6d4ff;
+  --lesson-accent: #d5a8ff;
+  --lesson-active-bg: linear-gradient(135deg, rgba(92, 54, 148, 0.9), rgba(54, 29, 94, 0.94));
+  --lesson-glow: rgba(180, 120, 255, 0.26);
+}
+
+.earth-lesson-button:nth-child(5) {
+  --lesson-border: rgba(255, 158, 181, 0.42);
+  --lesson-bg: rgba(58, 18, 32, 0.76);
+  --lesson-text: #ffd3de;
+  --lesson-accent: #ff9eb5;
+  --lesson-active-bg: linear-gradient(135deg, rgba(138, 40, 66, 0.9), rgba(78, 20, 38, 0.94));
+  --lesson-glow: rgba(255, 120, 150, 0.26);
+}
+
+/* Réponses du quiz : A bleu, B violet, C orange */
+.earth-answer:nth-child(1) {
+  --answer-border: rgba(124, 196, 255, 0.5);
+  --answer-bg: linear-gradient(135deg, rgba(9, 48, 98, 0.86), rgba(5, 27, 60, 0.88));
+  --answer-accent: #7cc4ff;
+  --answer-bg-active: linear-gradient(135deg, rgba(14, 82, 160, 0.94), rgba(7, 44, 100, 0.96));
+  --answer-letter-border: rgba(124, 196, 255, 0.55);
+}
+
+.earth-answer:nth-child(2) {
+  --answer-border: rgba(213, 168, 255, 0.5);
+  --answer-bg: linear-gradient(135deg, rgba(48, 29, 84, 0.86), rgba(27, 16, 52, 0.88));
+  --answer-accent: #d5a8ff;
+  --answer-bg-active: linear-gradient(135deg, rgba(84, 50, 136, 0.94), rgba(45, 26, 82, 0.96));
+  --answer-letter-border: rgba(213, 168, 255, 0.55);
+}
+
+.earth-answer:nth-child(3) {
+  --answer-border: rgba(255, 192, 122, 0.52);
+  --answer-bg: linear-gradient(135deg, rgba(72, 42, 12, 0.86), rgba(42, 24, 7, 0.88));
+  --answer-accent: #ffc07a;
+  --answer-bg-active: linear-gradient(135deg, rgba(132, 74, 16, 0.94), rgba(72, 40, 9, 0.96));
+  --answer-letter-border: rgba(255, 192, 122, 0.55);
+}
