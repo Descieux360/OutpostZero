@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
 import { Menu, Orbit, X } from 'lucide-react'
-import { lunarScenario } from '../data/lunarScenario'
+import { LUNAR_SCENARIO } from '../data/lunarScenario'
 import { useMission } from '../features/mission/MissionContext'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -38,7 +38,7 @@ export function NavBar() {
         <div className="hidden items-center gap-1 md:flex">
           {links}
           {state.missionStatus === 'active' && (
-            <span className="ml-3 rounded-full border border-line px-3 py-1 text-xs text-dust">Day {state.day} of {lunarScenario.totalDays}</span>
+            <span className="ml-3 rounded-full border border-line px-3 py-1 text-xs text-dust">Day {state.day} of {LUNAR_SCENARIO.totalDays}</span>
           )}
         </div>
 
@@ -50,7 +50,7 @@ export function NavBar() {
       {open && (
         <div id="mobile-menu" className="flex flex-col gap-1 border-t border-line px-4 py-3 md:hidden">
           {links}
-          {state.missionStatus === 'active' && <p className="px-3 pt-1 text-xs text-dust">Day {state.day} of {lunarScenario.totalDays}</p>}
+          {state.missionStatus === 'active' && <p className="px-3 pt-1 text-xs text-dust">Day {state.day} of {LUNAR_SCENARIO.totalDays}</p>}
         </div>
       )}
     </header>

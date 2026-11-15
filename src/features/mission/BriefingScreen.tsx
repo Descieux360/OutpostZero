@@ -1,5 +1,5 @@
 import { ArrowRight, Info } from 'lucide-react'
-import { lunarScenario as cfg } from '../../data/lunarScenario'
+import { LUNAR_SCENARIO as cfg } from '../../data/lunarScenario'
 import { MockBadge } from '../../components/MockBadge'
 
 export function BriefingScreen({ onBegin }: { onBegin: () => void }) {

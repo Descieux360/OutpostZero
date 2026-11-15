@@ -1,61 +1,57 @@
-import type { MissionConfig } from '../domain/types'
+import type { MissionConfig } from '../domain/types';
 
-/**
- * MOCK SCENARIO. Every number below is a GAME ASSUMPTION in game units.
- * None is a NASA value or a real engineering rate (spec 5.1, 7.3).
- * All balance constants live here and nowhere else (spec 9.5).
- */
-export const lunarScenario: MissionConfig = {
-  name: 'Lunar Mission 01',
-  totalDays: 7,
+export const LUNAR_SCENARIO: MissionConfig = {
+  name: 'Outpost Zero: 30-Day Lunar Surface Mission',
+  totalDays: 30,
   resources: [
-    { id: 'energy', label: 'Energy', start: 100, max: 150, warnBelow: 30 },
-    { id: 'oxygen', label: 'Oxygen', start: 100, max: 150, warnBelow: 30 },
-    { id: 'water', label: 'Water', start: 100, max: 150, warnBelow: 30 },
-    { id: 'food', label: 'Food', start: 80, max: 150, warnBelow: 25 },
+    { id: 'energy', label: 'Energy (kWh)', start: 120, max: 200, warnBelow: 30 },
+    { id: 'oxygen', label: 'Oxygen (L)', start: 120, max: 200, warnBelow: 30 },
+    { id: 'water', label: 'Water (L)', start: 120, max: 200, warnBelow: 30 },
+    { id: 'food', label: 'Food Rations', start: 100, max: 200, warnBelow: 25 },
   ],
   systems: [
     {
       id: 'solar',
-      lessonId: 'energy-planning',
-      name: 'Solar array',
-      role: 'Energy supply',
-      effectsByMode: { normal: { energy: 40 }, conserve: { energy: 40 }, damaged: { energy: 15 } },
-      explainer:
-        'The array is the outpost’s only power source. Everything else depends on it, so a fault here spreads to the other systems.',
+      name: 'Solar Array Field',
+      role: 'Generates electrical power for base modules',
+      effectsByMode: {
+        normal: { energy: 42 },
+        conserve: { energy: 28 },
+        paused: { energy: 0 },
+        damaged: { energy: 15 },
+      },
+      explainer: 'Photovoltaic panels collect sunlight during the lunar day to charge fuel cells.',
     },
     {
       id: 'habitat',
-      lessonId: 'radiation-shelter',
-      name: 'Habitat and life support',
-      role: 'Oxygen, water recovery, crew shelter',
+      name: 'Habitat & Life Support',
+      role: 'Recycles air and water for astronaut survival',
       effectsByMode: {
-        normal: { energy: -18, oxygen: 6, water: 4 },
-        conserve: { energy: -12, oxygen: 4, water: 3 },
+        normal: { energy: -16, oxygen: 8, water: 5 },
+        conserve: { energy: -10, oxygen: 5, water: 3 },
+        paused: { energy: 0, oxygen: 0, water: 0 },
+        damaged: { energy: -20, oxygen: 3, water: 1 },
       },
-      explainer:
-        'Houses the crew and keeps oxygen and water in balance. It also holds the shielded area used during the radiation event.',
+      explainer: 'Environmental Control and Life Support System (ECLSS) reclaims humidity and scrubs CO2.',
+      lessonId: 'life-support',
     },
     {
       id: 'greenhouse',
-      lessonId: 'food-needs-inputs',
-      name: 'Greenhouse',
-      role: 'Food production',
+      name: 'Hydroponic Greenhouse',
+      role: 'Grows fresh crops and yields biomass',
       effectsByMode: {
-        normal: { energy: -14, water: -9, food: 12 },
-        conserve: { energy: -8, water: -5, food: 6 },
+        normal: { energy: -14, water: -8, food: 11, oxygen: 2 },
+        conserve: { energy: -8, water: -4, food: 6, oxygen: 1 },
+        paused: { energy: 0, water: 0, food: 0, oxygen: 0 },
+        damaged: { energy: -15, water: -10, food: 2, oxygen: 0 },
       },
-      explainer:
-        'Grows food, but needs both water and energy to do it. Pausing it protects other reserves and costs food.',
+      explainer: 'LED hydroponics supply fresh nutrition, requiring significant water and electricity.',
     },
   ],
-  // Display-only for now. Incident resolution is the next build step.
   incidents: [
-    { id: 'solar-storm', day: 3, title: 'Solar storm', summary: 'Decide whether to shelter the crew in the shielded habitat area.' },
-    { id: 'power-fault', day: 5, title: 'Power-system fault', summary: 'A fault reduces solar array output.' },
-    { id: 'water-shortage', day: 6, title: 'Water shortage', summary: 'Reserves run low. Protect water or protect food.' },
+    { id: 'power-fault-day-4', day: 4, title: 'Power Grid Short Circuit', summary: 'Solar Array junction malfunction.' },
+    { id: 'solar-storm-day-10', day: 10, title: 'Solar Energetic Particle Event', summary: 'High radiation proton flux.' },
+    { id: 'water-recycler-leak-day-18', day: 18, title: 'Water Recycler Filter Clog', summary: 'Regolith dust in ECLSS filters.' },
+    { id: 'solar-storm-day-22', day: 22, title: 'Solar Energetic Particle Event', summary: 'Second solar particle surge.' },
   ],
-}
-
-/** Per-day crew consumption in game units. Game assumption. */
-export const crewUse = { oxygen: -8, water: -6, food: -9 } as const
+};

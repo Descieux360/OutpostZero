@@ -1,10 +1,10 @@
-import { createContext, useContext, useReducer, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, type Dispatch, type ReactNode } from 'react'
 import type { MissionState } from '../../domain/types'
 import { initialMission, missionReducer, type MissionAction } from './missionReducer'
 
 interface MissionContextValue {
   state: MissionState
-  dispatch: (action: MissionAction) => void
+  dispatch: Dispatch<MissionAction>
 }
 
 const MissionContext = createContext<MissionContextValue | null>(null)
