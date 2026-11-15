@@ -245,13 +245,11 @@ const SOUND_RECIPES: Record<SoundName, (context: AudioContext) => void> = {
   success: (context) => {
     const notes = [392, 523.25, 659.25, 783.99];
     notes.forEach((frequency, index) => {
-      playTone(context, {
+      playBell(context, {
         frequency,
         duration: 0.35,
-        type: "sine",
-        volume: 0.1 - index * 0.015,
+        volume: 0.09 - index * 0.012,
         delay: index * 0.08,
-        detune: index * 3,
       });
     });
     playTone(context, { frequency: 523.25, duration: 0.2, type: "sine", volume: 0.05 });
@@ -277,17 +275,9 @@ const SOUND_RECIPES: Record<SoundName, (context: AudioContext) => void> = {
   },
   // Étoile : carillon avec matière, comme de l'eau qui résonne
   star: (context) => {
-    for (let i = 0; i < 3; i++) {
-      const freq = 1318.5 * Math.pow(2, i * 0.1);
-      playTone(context, {
-        frequency: freq,
-        duration: 0.4,
-        type: "sine",
-        volume: 0.06,
-        delay: i * 0.1,
-        detune: i * -10,
-      });
-    }
+    playBell(context, { frequency: 1318.5, duration: 0.45, volume: 0.08 });
+    playBell(context, { frequency: 1760, duration: 0.4, volume: 0.065, delay: 0.09 });
+    playBell(context, { frequency: 2637, duration: 0.3, volume: 0.045, delay: 0.17 });
     playWhoosh(context, {
       duration: 0.4,
       volume: 0.03,
@@ -389,10 +379,9 @@ const SOUND_RECIPES: Record<SoundName, (context: AudioContext) => void> = {
   bonus: (context) => {
     const notes = [392, 523.25, 659.25];
     notes.forEach((frequency, index) => {
-      playTone(context, {
+      playBell(context, {
         frequency,
         duration: 0.4,
-        type: "sine",
         volume: 0.08,
         delay: index * 0.1,
       });

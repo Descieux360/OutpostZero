@@ -20,7 +20,6 @@ interface HomeScreenProps {
   narrationSupported: boolean;
   onToggleNarration: () => void;
   stars: number;
-  coins?: number;
   onOpenRewards: () => void;
 }
 
@@ -30,6 +29,11 @@ export default function HomeScreen({
   highContrast,
   onToggleReducedMotion,
   onToggleHighContrast,
+  soundEnabled,
+  onToggleSound,
+  narrationEnabled,
+  narrationSupported,
+  onToggleNarration,
   stars,
   onOpenRewards,
 }: HomeScreenProps) {
@@ -73,6 +77,24 @@ export default function HomeScreen({
           </button>
         </div>
       </main>
+
+      <NavigationMenu onOpen={openPanel} />
+
+      {activePanel && (
+        <HomePanelDialog
+          panel={activePanel}
+          onClose={() => setActivePanel(null)}
+          reducedMotion={reducedMotion}
+          highContrast={highContrast}
+          onToggleReducedMotion={onToggleReducedMotion}
+          onToggleHighContrast={onToggleHighContrast}
+          soundEnabled={soundEnabled}
+          onToggleSound={onToggleSound}
+          narrationEnabled={narrationEnabled}
+          narrationSupported={narrationSupported}
+          onToggleNarration={onToggleNarration}
+        />
+      )}
     </div>
   );
 }

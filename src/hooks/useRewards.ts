@@ -23,8 +23,7 @@ function createInitialState(dayKey = getRewardsDayKey()): RewardsState {
     completedTasks: [],
     bonusClaimed: false,
     purchases: [],
-  };
-}
+  };}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -159,6 +158,14 @@ export default function useRewards() {
         purchases: [purchase, ...current.purchases].slice(0, 12),
       };
     });
+  }, []);
+
+  /** Ajoute des étoiles à la cagnotte (ex: récompense de niveau). */
+  const addCoins = useCallback((amount: number) => {
+    setRewards((current) => ({
+      ...current,
+      stars: current.stars + Math.max(0, Math.floor(amount)),
+    }));
   }, []);
 
   return { rewards, completeTask, redeemReward, addCoins };

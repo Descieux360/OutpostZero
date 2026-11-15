@@ -21,7 +21,7 @@ export interface RewardPurchase {
   at: number;
 }
 
-export interface RewardsState { coins: number;
+export interface RewardsState {
   stars: number;
   /** Jour local (AAAA-MM-JJ) auquel correspondent les tâches terminées. */
   dayKey: string;

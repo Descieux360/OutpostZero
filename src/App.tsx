@@ -39,15 +39,7 @@ export default function App() {
   };
 
   const giveLevelReward = () => {
-    addCoins(100);
-  };
-
-  const giveLevelReward2 = () => {
-    addCoins(100);
-  };
-
-  const giveLevelReward3 = () => {
-    addCoins(100);
+    addCoins(1);
   };
 
   return (
@@ -64,7 +56,7 @@ export default function App() {
           narrationEnabled={narrationEnabled}
           narrationSupported={narrationSupported}
           onToggleNarration={toggleNarration}
-          coins={rewards.coins}
+          stars={rewards.stars}
           onOpenRewards={openRewards}
         />
       ) : screen === "missions" ? (
