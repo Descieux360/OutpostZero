@@ -6,7 +6,7 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ onContinue }: WelcomeScreenProps) {
   return (
-    <main className="home-hero relative flex min-h-screen w-full flex-col justify-between overflow-hidden bg-[#06143D] bg-[url('/space-academy-hero.jpg')] bg-cover bg-center font-sans">
+    <main className="home-hero relative flex min-h-screen w-full flex-col justify-between overflow-hidden bg-[#06143D] bg-[url('/images/space-academy-hero.jpg')] bg-cover bg-center font-sans">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#06143D]/55 via-[#06143D]/10 to-[#06143D]/65" />
       <section className="home-hero-content animate-enter relative z-10 mx-auto my-auto flex w-full max-w-5xl flex-col items-center px-5 py-16 text-center">
         <p className="mb-4 rounded-full border border-cyan-100/25 bg-[#06143D]/50 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-cyan-100 shadow-lg backdrop-blur-sm sm:text-sm">Ta mission commence ici</p>
