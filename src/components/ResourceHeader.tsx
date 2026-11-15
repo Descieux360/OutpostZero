@@ -24,7 +24,6 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
     id: string,
     unit: string,
     icon: React.ReactNode,
-    colorClass: string,
     barColor: string
   ) => {
     const max = getResourceMax(id);
@@ -104,7 +103,6 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
           'energy',
           'kWh',
           <Zap className="w-4 h-4 text-amber-400" />,
-          'text-amber-400',
           'bg-amber-400'
         )}
 
@@ -114,7 +112,6 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
           'oxygen',
           'L',
           <Wind className="w-4 h-4 text-sky-400" />,
-          'text-sky-400',
           'bg-sky-400'
         )}
 
@@ -124,7 +121,6 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
           'water',
           'L',
           <Droplets className="w-4 h-4 text-blue-400" />,
-          'text-blue-400',
           'bg-blue-400'
         )}
 
@@ -134,7 +130,6 @@ export const ResourceHeader: React.FC<ResourceHeaderProps> = ({ state, config })
           'food',
           'Rations',
           <Utensils className="w-4 h-4 text-emerald-400" />,
-          'text-emerald-400',
           'bg-emerald-400'
         )}
       </div>
