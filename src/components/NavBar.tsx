@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
-import { Menu, Orbit, X, Rocket, BookOpen, Map, Sparkles } from 'lucide-react'
+import { Menu, Orbit, X, Rocket, BookOpen, Sparkles } from 'lucide-react'
 import { LUNAR_SCENARIO } from '../data/lunarScenario'
 import { useMission } from '../features/mission/MissionContext'
 
