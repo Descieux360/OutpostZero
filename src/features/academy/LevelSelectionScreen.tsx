@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { ArrowLeft, ArrowRight, Check, Home, Settings, Star, X } from 'lucide-react'
+import { ArrowRight, Check, Star, X } from 'lucide-react'
 import { ACADEMY_LEVELS } from '../../data/academyLevels'
 import { useAcademyProgress } from './AcademyProgressContext'
 import { SpaceMissionBackdrop } from './SpaceMissionBackdrop'
