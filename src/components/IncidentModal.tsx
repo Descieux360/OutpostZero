@@ -15,15 +15,15 @@ export const IncidentModal: React.FC<IncidentModalProps> = ({ incident, onResolv
           <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[var(--color-action)] text-white text-xs font-black rounded-full uppercase">
             {incident.isScripted ? (
               <>
-                <Siren className="w-3.5 h-3.5" /> Scripted Emergency
+                <Siren className="w-3.5 h-3.5" /> Alerte de mission
               </>
             ) : (
               <>
-                <ClipboardList className="w-3.5 h-3.5" /> Scenario Event
+                <ClipboardList className="w-3.5 h-3.5" /> Événement
               </>
             )}
           </span>
-          <span className="text-xs font-bold text-[var(--color-dust)]">Day {incident.day} of 30</span>
+          <span className="text-xs font-bold text-[var(--color-dust)]">Jour {incident.day} sur 30</span>
         </div>
 
         <h2 className="text-2xl font-black text-white mb-1">{incident.title}</h2>
@@ -38,10 +38,10 @@ export const IncidentModal: React.FC<IncidentModalProps> = ({ incident, onResolv
           <div className="mb-6 p-4 rounded-2xl bg-blue-950/80 border-2 border-blue-500/40 text-xs text-blue-100 space-y-1">
             <div className="font-black flex items-center gap-1.5 text-blue-300">
               <Satellite className="w-4 h-4 text-blue-400" />
-              <span>REAL NASA DONKI SATELLITE RECORD</span>
+              <span>Donnée satellite NASA DONKI</span>
             </div>
-            <div>Timestamp: {incident.nasaContext.eventTime}</div>
-            <div>Detecting Instruments: {incident.nasaContext.instruments.join(', ') || 'SOHO / STEREO'}</div>
+            <div>Date : {incident.nasaContext.eventTime}</div>
+            <div>Instruments : {incident.nasaContext.instruments.join(', ') || 'SOHO / STEREO'}</div>
             <div className="italic text-[11px] mt-2 text-blue-300/80">{incident.nasaContext.disclaimer}</div>
           </div>
         )}
@@ -56,7 +56,7 @@ export const IncidentModal: React.FC<IncidentModalProps> = ({ incident, onResolv
               <div className="font-black text-base text-white">{choice.label}</div>
               <div className="text-xs font-semibold text-slate-300 mt-1">{choice.kidDescription}</div>
               <div className="text-xs font-bold text-amber-400 mt-1.5 flex items-center gap-1">
-                <Scale className="w-3.5 h-3.5" /> Trade-off: {choice.tradeoffExplanation}
+                <Scale className="w-3.5 h-3.5" /> Compromis : {choice.tradeoffExplanation}
               </div>
             </button>
           ))}

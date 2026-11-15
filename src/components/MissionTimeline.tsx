@@ -18,21 +18,21 @@ export const MissionTimeline: React.FC<MissionTimelineProps> = ({
     if (day === 4) {
       return (
         <span className="text-[10px] text-amber-400 flex items-center justify-center gap-0.5 font-black">
-          <AlertTriangle className="w-3 h-3" /> Fault
+          <AlertTriangle className="w-3 h-3" /> Panne
         </span>
       );
     }
     if (day === 12 || day === 22) {
       return (
         <span className="text-[10px] text-orange-400 flex items-center justify-center gap-0.5 font-black">
-          <Sun className="w-3 h-3 text-amber-400" /> Storm
+          <Sun className="w-3 h-3 text-amber-400" /> Alerte
         </span>
       );
     }
     if (day === 10 || day === 20 || day === 30) {
       return (
         <span className="text-[10px] text-sky-400 flex items-center justify-center gap-0.5 font-black">
-          <Flag className="w-3 h-3 text-sky-400" /> Flag
+          <Flag className="w-3 h-3 text-sky-400" /> Étape
         </span>
       );
     }
@@ -44,22 +44,22 @@ export const MissionTimeline: React.FC<MissionTimelineProps> = ({
       <div className="flex flex-wrap justify-between items-center gap-2">
         <div>
           <h2 className="text-lg font-black text-white flex items-center gap-2">
-            <span>📅 30-Day Mission Log Calendar</span>
+            <span>📅 Calendrier de mission · 30 jours</span>
           </h2>
           <p className="text-xs font-semibold text-[var(--color-dust)]">
-            Click Advance Day to progress turn by turn through the 30-day lunar surface schedule.
+            Utilise « Avancer d’un jour » pour suivre la mission lunaire, jour après jour.
           </p>
         </div>
 
         <div className="flex items-center gap-3 text-xs font-extrabold text-[#94A3B8]">
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" /> Completed
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" /> Terminé
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-action)]" /> Current Day
+            <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-action)]" /> Jour actuel
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-700" /> Locked
+            <span className="w-2.5 h-2.5 rounded-full bg-slate-700" /> À venir
           </span>
         </div>
       </div>
@@ -85,7 +85,7 @@ export const MissionTimeline: React.FC<MissionTimelineProps> = ({
               {/* Day Header Row */}
               <div className="flex justify-between items-center">
                 <span className={`text-xs font-black ${isCurrent ? 'text-[var(--color-action)]' : isPast ? 'text-white' : 'text-slate-500'}`}>
-                  Day {dayNum}
+                  Jour {dayNum}
                 </span>
 
                 {isPast ? (
@@ -103,7 +103,7 @@ export const MissionTimeline: React.FC<MissionTimelineProps> = ({
                   eventBadge
                 ) : (
                   <span className="text-[10px] font-semibold text-slate-500">
-                    {isCurrent ? 'Active' : isPast ? 'Passed' : ''}
+                    {isCurrent ? 'En cours' : isPast ? 'Terminé' : ''}
                   </span>
                 )}
               </div>

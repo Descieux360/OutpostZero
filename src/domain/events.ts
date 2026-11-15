@@ -20,16 +20,16 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
       id: 'power-fault-day-4',
       day: 4,
       isScripted: true,
-      title: 'Power Grid Short Circuit',
-      subtitle: 'Solar Array Overheat',
-      description: 'Lunar regolith dust caused a power junction overload! Solar Array energy production drops until repaired.',
+      title: 'Panne du réseau électrique',
+      subtitle: 'Surchauffe des panneaux solaires',
+      description: 'La poussière lunaire a provoqué un défaut de connexion. La production des panneaux baisse jusqu’à la réparation.',
       affectedSystemId: 'solar',
       choices: [
         {
           id: 'repair-now',
-          label: 'Perform Immediate Repair',
-          kidDescription: 'Use spare parts and energy right away to fix the array.',
-          tradeoffExplanation: 'Costs 10 Energy immediately, returns Solar Array to 100% output.',
+          label: 'Réparer immédiatement',
+          kidDescription: 'Utilise des pièces de rechange et de l’énergie pour réparer les panneaux.',
+          tradeoffExplanation: 'Coûte 10 unités d’énergie et rétablit la production solaire.',
           effect: (s) => ({
             ...s,
             systemModes: { ...s.systemModes, solar: 'normal' },
@@ -39,9 +39,9 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
         },
         {
           id: 'delay-repair',
-          label: 'Delay Repair',
-          kidDescription: 'Leave it damaged for today to save instant energy.',
-          tradeoffExplanation: 'Solar Array remains in damaged mode (+18 Energy/day instead of +45).',
+          label: 'Reporter la réparation',
+          kidDescription: 'Économise de l’énergie maintenant, mais laisse les panneaux endommagés.',
+          tradeoffExplanation: 'La production solaire reste réduite jusqu’à la réparation.',
           effect: (s) => ({
             ...s,
             systemModes: { ...s.systemModes, solar: 'damaged' },
@@ -58,9 +58,9 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
       id: `solar-storm-day-${day}`,
       day,
       isScripted: true,
-      title: 'NASA Alert: Solar Particle Event (SEP)',
-      subtitle: 'High-Energy Radiation Surge',
-      description: `Real NASA DONKI satellite record from ${timeStr}. High solar radiation threatens astronauts on the surface.`,
+      title: 'Alerte solaire : particules énergétiques',
+      subtitle: 'Risque accru de radiations',
+      description: `Le scénario s’inspire d’une donnée NASA DONKI du ${timeStr}. L’équipage doit réagir à une alerte de radiation.`,
       affectedSystemId: 'habitat',
       nasaContext: sepRecord
         ? {
@@ -68,15 +68,15 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
             instruments: sepRecord.instruments,
             linkedFlares: sepRecord.linkedFlares,
             linkedCmes: sepRecord.linkedCmes,
-            disclaimer: 'DONKI real-time data provided by NASA CCMC. Prototyping research quality.',
+            disclaimer: 'Donnée NASA DONKI destinée au contexte éducatif ; elle ne constitue pas une alerte opérationnelle.',
           }
         : undefined,
       choices: [
         {
           id: 'bunker-shelter',
-          label: 'Order Crew to Storm Shelter',
-          kidDescription: 'Move crew into the underground shielded bunker module.',
-          tradeoffExplanation: 'Keeps crew 100% safe from solar radiation.',
+          label: 'Mettre l’équipage à l’abri',
+          kidDescription: 'Déplace l’équipage dans la zone protégée de la base.',
+          tradeoffExplanation: 'Dans le jeu, l’équipage est protégé, mais les activités extérieures s’arrêtent.',
           lessonId: 'radiation-shelter',
           effect: (s) => ({
             ...s,
@@ -86,9 +86,9 @@ export function getEventForDay(day: number, state: MissionState): DynamicInciden
         },
         {
           id: 'boost-deflection',
-          label: 'Power Up Radiation Shields',
-          kidDescription: 'Pump electrical energy into habitat electromagnetic shields.',
-          tradeoffExplanation: 'Costs 25 Energy, keeps crew safe on the surface.',
+          label: 'Alimenter les protections',
+          kidDescription: 'Réserve de l’énergie pour les protections de l’habitat.',
+          tradeoffExplanation: 'Coûte 25 unités d’énergie dans cette simulation.',
           lessonId: 'radiation-shelter',
           effect: (s) => ({
             ...s,

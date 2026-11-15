@@ -1,11 +1,12 @@
-import { Outlet } from 'react-router'
+import { Outlet, useLocation } from 'react-router'
 import { NavBar } from '../components/NavBar'
 
-/** Wraps every route so the navbar is available on every page, including "not found". */
+/** Keep the welcome screen immersive; show navigation throughout the learning and mission flow. */
 export function AppLayout() {
+  const { pathname } = useLocation()
   return (
     <>
-      <NavBar />
+      {pathname !== '/' && <NavBar />}
       <Outlet />
     </>
   )

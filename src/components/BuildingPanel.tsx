@@ -49,13 +49,13 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
     if (currentMode === 'damaged') {
       return (
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-black">
-          <AlertOctagon className="w-3.5 h-3.5" /> Damaged
+          <AlertOctagon className="w-3.5 h-3.5" /> Endommagé
         </span>
       );
     }
     return (
       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-black">
-        <CheckCircle2 className="w-3.5 h-3.5" /> Operating Normally
+        <CheckCircle2 className="w-3.5 h-3.5" /> Fonctionne normalement
       </span>
     );
   };
@@ -80,30 +80,30 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
     switch (activeId) {
       case 'crew':
         return {
-          name: 'Astronaut Crew',
-          role: 'Moonbase human personnel',
-          explainer: 'Astronauts need constant oxygen, water, and food every single day to survive.',
+          name: 'Équipage d’astronautes',
+          role: 'Équipage de la base lunaire',
+          explainer: 'L’équipage a besoin d’oxygène, d’eau et de nourriture chaque jour pour rester en bonne santé.',
           icon: <Users className="w-6 h-6 text-[var(--color-action)]" />,
         };
       case 'rover':
         return {
-          name: 'Autonomous Lunar Rover',
-          role: 'Surface exploration vehicle',
-          explainer: 'Explores dark lunar craters and scans mineral core samples for extra space science points.',
+          name: 'Rover lunaire autonome',
+          role: 'Véhicule d’exploration de la surface',
+          explainer: 'Explore les cratères lunaires et collecte des échantillons pour la recherche.',
           icon: <Compass className="w-6 h-6 text-sky-400" />,
         };
       case 'comms':
         return {
-          name: 'Communications Dish',
-          role: 'Earth telemetry link',
-          explainer: 'Transmits outpost research telemetry and status reports back to NASA Mission Control on Earth.',
+          name: 'Antenne de communication',
+          role: 'Lien de communication avec la Terre',
+          explainer: 'Transmet les données de la base et les rapports à l’équipe au sol.',
           icon: <Radio className="w-6 h-6 text-orange-400" />,
         };
       default:
         return {
-          name: 'Habitat & Life Support',
-          role: 'Environmental control unit',
-          explainer: 'Recycles air and water for astronaut survival.',
+          name: 'Habitat et support-vie',
+          role: 'Système de contrôle de l’habitat',
+          explainer: 'Recycle l’air et l’eau pour soutenir l’équipage.',
           icon: <Home className="w-6 h-6 text-[var(--color-action)]" />,
         };
     }
@@ -127,7 +127,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
         }`}
       >
         <Wrench className="w-4 h-4" />
-        <span>Emergency Repair (-15 Energy)</span>
+        <span>Réparation d’urgence (−15 énergie)</span>
         {!check.allowed && (
           <span className="text-xs font-semibold text-red-400 flex items-center gap-1 ml-2">
             <AlertTriangle className="w-3.5 h-3.5" /> {check.reason}
@@ -163,10 +163,10 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-black uppercase tracking-wider text-[var(--color-dust)]">
-            Constant Daily Rates
+            Effets quotidiens
           </span>
           <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-400/90 bg-amber-500/10 px-2.5 py-0.5 rounded-md border border-amber-500/20">
-            <FlaskConical className="w-3 h-3" /> Fixed per day
+            <FlaskConical className="w-3 h-3" /> Par jour
           </span>
         </div>
 
@@ -174,7 +174,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
           <div className="grid grid-cols-2 gap-3 bg-slate-900/80 p-4 rounded-2xl border border-slate-700/70 font-bold text-sm">
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
               <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
-                <Zap className="w-4 h-4 text-amber-400" /> Energy
+                <Zap className="w-4 h-4 text-amber-400" /> Énergie
               </span>
               <span className={activeEffects.energy && activeEffects.energy > 0 ? 'text-emerald-400 font-black' : activeEffects.energy && activeEffects.energy < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
                 {formatResourceValue(activeEffects.energy)}
@@ -183,7 +183,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
 
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
               <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
-                <Wind className="w-4 h-4 text-sky-400" /> Oxygen
+                <Wind className="w-4 h-4 text-sky-400" /> Oxygène
               </span>
               <span className={activeEffects.oxygen && activeEffects.oxygen > 0 ? 'text-emerald-400 font-black' : activeEffects.oxygen && activeEffects.oxygen < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
                 {formatResourceValue(activeEffects.oxygen)}
@@ -192,7 +192,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
 
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
               <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
-                <Droplets className="w-4 h-4 text-blue-400" /> Water
+                <Droplets className="w-4 h-4 text-blue-400" /> Eau
               </span>
               <span className={activeEffects.water && activeEffects.water > 0 ? 'text-emerald-400 font-black' : activeEffects.water && activeEffects.water < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
                 {formatResourceValue(activeEffects.water)}
@@ -201,7 +201,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
 
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
               <span className="text-slate-300 flex items-center gap-1.5 font-extrabold">
-                <Utensils className="w-4 h-4 text-emerald-400" /> Food
+                <Utensils className="w-4 h-4 text-emerald-400" /> Nourriture
               </span>
               <span className={activeEffects.food && activeEffects.food > 0 ? 'text-emerald-400 font-black' : activeEffects.food && activeEffects.food < 0 ? 'text-red-400 font-black' : 'text-slate-400'}>
                 {formatResourceValue(activeEffects.food)}
@@ -211,25 +211,25 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
         ) : activeId === 'crew' ? (
           <div className="grid grid-cols-2 gap-3 bg-slate-900/80 p-4 rounded-2xl border border-slate-700/70 font-bold text-sm text-red-400">
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
-              <span className="text-slate-300 flex items-center gap-1.5"><Wind className="w-4 h-4" /> Oxygen:</span>
+              <span className="text-slate-300 flex items-center gap-1.5"><Wind className="w-4 h-4" /> Oxygène:</span>
               <span className="font-black">-8</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
-              <span className="text-slate-300 flex items-center gap-1.5"><Droplets className="w-4 h-4" /> Water:</span>
+              <span className="text-slate-300 flex items-center gap-1.5"><Droplets className="w-4 h-4" /> Eau:</span>
               <span className="font-black">-5</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60">
-              <span className="text-slate-300 flex items-center gap-1.5"><Utensils className="w-4 h-4" /> Food:</span>
+              <span className="text-slate-300 flex items-center gap-1.5"><Utensils className="w-4 h-4" /> Nourriture:</span>
               <span className="font-black">-8</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-lg bg-slate-800/60 text-slate-400">
-              <span className="flex items-center gap-1.5"><Zap className="w-4 h-4" /> Energy:</span>
+              <span className="flex items-center gap-1.5"><Zap className="w-4 h-4" /> Énergie:</span>
               <span>0</span>
             </div>
           </div>
         ) : (
           <div className="p-4 bg-slate-900/80 rounded-2xl border border-slate-700/70 text-xs font-semibold text-slate-300">
-            Surface hardware system. Choose an action below to dispatch commands.
+            Équipement de surface. Choisis une action ci-dessous pour envoyer une commande.
           </div>
         )}
       </div>
@@ -243,7 +243,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
             onClick={() => onApplyAction({ type: 'CLEAN_SOLAR_PANELS' })}
             className="w-full py-3.5 px-4 rounded-xl bg-slate-800 border border-slate-700 text-amber-300 font-extrabold text-xs btn-chunky flex items-center justify-center gap-2 hover:border-amber-400 transition cursor-pointer"
           >
-            <Sparkles className="w-4 h-4" /> Clean Solar Dust (-5 Energy)
+            <Sparkles className="w-4 h-4" /> Nettoyer les panneaux (−5 énergie)
           </button>
         )}
 
@@ -252,7 +252,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
             onClick={() => onApplyAction({ type: 'ROVER_COLLECT_SAMPLES' })}
             className="w-full py-3.5 px-4 rounded-xl bg-[var(--color-action)] text-white font-extrabold text-sm btn-chunky flex items-center justify-center gap-2 hover:bg-[var(--color-action-hover)] transition cursor-pointer"
           >
-            <Compass className="w-4 h-4" /> Scan Lunar Samples (-20 E, +100 Science)
+            <Compass className="w-4 h-4" /> Analyser des échantillons (−20 énergie, +100 science)
           </button>
         )}
 
@@ -261,7 +261,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
             onClick={() => onApplyAction({ type: 'COMMS_TRANSMIT_REPORT' })}
             className="w-full py-3.5 px-4 rounded-xl bg-[var(--color-action)] text-white font-extrabold text-sm btn-chunky flex items-center justify-center gap-2 hover:bg-[var(--color-action-hover)] transition cursor-pointer"
           >
-            <Radio className="w-4 h-4" /> Send Data to Earth (-15 E, +50 Science)
+            <Radio className="w-4 h-4" /> Transmettre à la Terre (−15 énergie, +50 science)
           </button>
         )}
       </div>
@@ -274,7 +274,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
             className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-slate-800/80 border border-slate-700 text-white font-extrabold text-xs hover:border-[var(--color-action)] transition"
           >
             <BookOpen className="w-4 h-4 text-[var(--color-action)]" />
-            <span>Learn science behind {system.name}</span>
+            <span>Découvrir la science : {system.name}</span>
           </Link>
         </div>
       )}
@@ -286,7 +286,7 @@ export const BuildingPanel: React.FC<BuildingPanelProps> = ({
           disabled={!!state.pendingEventId}
           className="w-full py-4 px-6 bg-[var(--color-action)] text-white font-black text-base rounded-2xl btn-chunky flex items-center justify-center gap-2 cursor-pointer hover:bg-[var(--color-action-hover)] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg transition"
         >
-          <span>Advance Day</span>
+          <span>Avancer d’un jour</span>
           <ArrowRight className="w-5 h-5" />
         </button>
       </div>

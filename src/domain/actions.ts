@@ -16,50 +16,50 @@ export interface ActionCheck {
  */
 export function canPerformAction(state: MissionState, action: PlayerAction): ActionCheck {
   if (state.missionStatus !== 'active') {
-    return { allowed: false, reason: 'Mission is not currently active.' };
+    return { allowed: false, reason: 'La mission n’est pas en cours.' };
   }
   if (state.pendingEventId) {
-    return { allowed: false, reason: 'Resolve the current space weather incident first!' };
+    return { allowed: false, reason: 'Résous d’abord l’incident en cours.' };
   }
   if (state.actionsLeft <= 0) {
-    return { allowed: false, reason: 'No actions remaining today! Click Advance Day to continue.' };
+    return { allowed: false, reason: 'Aucune action restante aujourd’hui. Avance au jour suivant.' };
   }
 
   switch (action.type) {
     case 'REPAIR_SYSTEM': {
       const currentMode = state.systemModes[action.systemId];
       if (currentMode !== 'damaged') {
-        return { allowed: false, reason: 'System is running normally and does not need repair.' };
+        return { allowed: false, reason: 'Ce système fonctionne normalement et n’a pas besoin d’être réparé.' };
       }
       if (state.resources.energy < 15) {
-        return { allowed: false, reason: 'Requires 15 Energy to complete emergency repairs.' };
+        return { allowed: false, reason: 'Il faut 15 unités d’énergie pour effectuer la réparation.' };
       }
       return { allowed: true };
     }
 
     case 'CLEAN_SOLAR_PANELS': {
       if (state.resources.energy < 5) {
-        return { allowed: false, reason: 'Requires 5 Energy to vibrate dust off panels.' };
+        return { allowed: false, reason: 'Il faut 5 unités d’énergie pour nettoyer les panneaux.' };
       }
       return { allowed: true };
     }
 
     case 'ROVER_COLLECT_SAMPLES': {
       if (state.resources.energy < 20) {
-        return { allowed: false, reason: 'Requires 20 Energy to dispatch the rover.' };
+        return { allowed: false, reason: 'Il faut 20 unités d’énergie pour envoyer le rover.' };
       }
       return { allowed: true };
     }
 
     case 'COMMS_TRANSMIT_REPORT': {
       if (state.resources.energy < 15) {
-        return { allowed: false, reason: 'Requires 15 Energy to transmit mission data.' };
+        return { allowed: false, reason: 'Il faut 15 unités d’énergie pour transmettre les données.' };
       }
       return { allowed: true };
     }
 
     default:
-      return { allowed: false, reason: 'Unknown action type.' };
+      return { allowed: false, reason: 'Action inconnue.' };
   }
 }
 
